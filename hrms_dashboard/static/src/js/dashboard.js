@@ -13,7 +13,7 @@ import { patch } from "@web/core/utils/patch";
 import { rpc } from "@web/core/network/rpc";
 export class HrDashboard extends Component{
     static template = 'HrDashboardMain';
-    static props = ["*"];
+    // 20.0 port: Owl 3 rejects `static props` wildcards; undeclared = all allowed.
     setup() {
         this.effect = useService("effect");
         this.action = useService("action");
@@ -738,15 +738,6 @@ export class HrDashboard extends Component{
                         }
                     },
                     scales: {
-                        xAxes: [{
-                            gridLines: { display: false, drawBorder: false },
-                            ticks: { fontColor: '#64748B', fontSize: 12 }
-                        }],
-                        yAxes: [{
-                            display: false,
-                            gridLines: { display: false },
-                            ticks: { display: false }
-                        }],
                         x: { // v3
                             grid: { display: false, drawBorder: false },
                             ticks: { color: '#64748B', font: { size: 12 } },
@@ -1038,16 +1029,6 @@ export class HrDashboard extends Component{
                     },
                     legend: { display: false }, // Chart.js 2
                     scales: {
-                        xAxes: [{
-                            display: true,
-                            gridLines: { display: false, drawBorder: false },
-                            ticks: { fontColor: '#94a3b8', fontSize: 12 }
-                        }],
-                        yAxes: [{
-                            display: true,
-                            ticks: { beginAtZero: true, display: false },
-                            gridLines: { color: '#f1f5f9', borderDash: [5, 5], drawBorder: false, drawTicks: false }
-                        }],
                         x: {
                             display: true,
                             grid: { display: false, drawBorder: false },
@@ -1146,16 +1127,6 @@ export class HrDashboard extends Component{
                     },
                     legend: { display: false },
                     scales: {
-                        xAxes: [{
-                            display: true,
-                            gridLines: { display: false, drawBorder: false },
-                            ticks: { fontColor: '#94a3b8', fontSize: 12 }
-                        }],
-                        yAxes: [{
-                            display: true,
-                            ticks: { beginAtZero: true, display: false },
-                            gridLines: { color: '#f1f5f9', borderDash: [5, 5], drawBorder: false, drawTicks: false }
-                        }],
                         x: {
                             display: true,
                             grid: { display: false, drawBorder: false },
@@ -1248,16 +1219,6 @@ export class HrDashboard extends Component{
                         }
                     },
                     scales: {
-                        xAxes: [{
-                            display: true,
-                            gridLines: { display: false, drawBorder: false },
-                            ticks: { fontColor: '#94a3b8', fontSize: 12 }
-                        }],
-                        yAxes: [{
-                            display: true,
-                            ticks: { beginAtZero: true, display: false },
-                            gridLines: { color: '#f1f5f9', borderDash: [5, 5], drawBorder: false, drawTicks: false }
-                        }],
                         x: {
                             display: true,
                             grid: { display: false, drawBorder: false },
