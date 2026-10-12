@@ -44,7 +44,9 @@
             'hrms_dashboard/static/src/css/dashboard.css',
             'hrms_dashboard/static/src/js/dashboard.js',
             'hrms_dashboard/static/src/xml/dashboard.xml',
-            'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js',
+            # 20.0 port: single Chart.js v3 for the whole backend (v2 xAxes
+            # syntax removed from dashboard.js; inventory dashboard needs v3).
+            'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js',
         ],
     },
     'images': ["static/description/banner.jpg"],

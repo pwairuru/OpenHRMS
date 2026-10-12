@@ -65,18 +65,17 @@
         'views/hr_employee_views.xml',
         'wizard/ohrms_core_support_views.xml',
     ],
+    # Hoteli: MuK backend theme is the active theme. The OpenHRMS home-menu
+    # theme files (side_bar.xml, appMenu.js, home_menu_theme.css,
+    # primary_variables.scss) collide with muk_web_theme (blank backend:
+    # NavBar xpath chain breaks), so they are unregistered. HR functions
+    # + support-ticket systray stay intact.
     'assets': {
-        'web._assets_primary_variables': [
-            ('prepend', 'ohrms_core/static/src/scss/primary_variables.scss'),
-        ],
         'web.assets_backend': [
             'ohrms_core/static/src/css/menu_order_alphabets.css',
             'ohrms_core/static/src/css/ohrms_core_support.css',
-            'ohrms_core/static/src/css/home_menu_theme.css',
-            'ohrms_core/static/src/js/appMenu.js',
             'ohrms_core/static/src/js/ohrms_core_systray.js',
             'ohrms_core/static/src/xml/ohrms_core_systray.xml',
-            'ohrms_core/static/templates/side_bar.xml',
         ],
     },
     "external_dependencies": {"python": ["pandas"]},
