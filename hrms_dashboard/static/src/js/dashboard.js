@@ -8,7 +8,8 @@ import { useService } from "@web/core/utils/hooks";
 import { WebClient } from "@web/webclient/webclient";
 import { user } from "@web/core/user";
 const actionRegistry = registry.category("actions");
-import { ActivityMenu } from "@hr_attendance/components/attendance_menu/attendance_menu";
+// Hoteli lean install: hr_attendance is optional. The static import is
+// replaced by a guarded dynamic import at the bottom of this file.
 import { patch } from "@web/core/utils/patch";
 import { rpc } from "@web/core/network/rpc";
 export class HrDashboard extends Component{
@@ -2119,20 +2120,31 @@ export class HrDashboard extends Component{
 }
 registry.category("actions").add("hr_dashboard", HrDashboard)
 
-patch(ActivityMenu.prototype, {
-    setup() {
-        super.setup();
-        var self = this
-        onMounted(() => {
-            this.env.bus.addEventListener('signin_signout', ({
-                detail
-            }) => {
-                if (detail.mode == 'checked_in') {
-                    self.state.checkedIn = detail.mode
-                } else {
-                    self.state.checkedIn = false
-                }
+// Hoteli lean install: hr_attendance is optional. Patch the attendance
+// systray menu only when that module is installed; otherwise skip.
+// Async so a missing module never breaks this dashboard's bundle.
+(async () => {
+    let ActivityMenu = null;
+    try {
+        ({ ActivityMenu } = await import("@hr_attendance/components/attendance_menu/attendance_menu"));
+    } catch {
+        return;
+    }
+    patch(ActivityMenu.prototype, {
+        setup() {
+            super.setup();
+            var self = this
+            onMounted(() => {
+                this.env.bus.addEventListener('signin_signout', ({
+                    detail
+                }) => {
+                    if (detail.mode == 'checked_in') {
+                        self.state.checkedIn = detail.mode
+                    } else {
+                        self.state.checkedIn = false
+                    }
+                })
             })
-        })
-    },
-})
+        },
+    });
+})();

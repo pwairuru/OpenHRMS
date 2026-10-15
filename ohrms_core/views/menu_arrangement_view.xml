@@ -2,15 +2,19 @@
 <odoo>
 <!-- Adding sequence to the HRMS modules root menu-->
     <data>
+        <!-- Hoteli lean install: Recruitment not installed, menu override commented out
         <menuitem name="Recruitment"
                   id="hr_recruitment.menu_hr_recruitment_root"
                   web_icon="hr_recruitment,static/description/icon.png"
                   sequence="4"/>
+        -->
 
+        <!-- Hoteli lean install: Attendances not installed, menu override commented out
         <menuitem id="hr_attendance.menu_hr_attendance_root"
                   name="Attendances" sequence="7"
                   groups="hr_attendance.group_hr_attendance_own_reader"
                   web_icon="hr_attendance,static/description/icon.png"/>
+        -->
 
         <menuitem name="Leaves"
                   id="hr_holidays.menu_hr_holidays_root"

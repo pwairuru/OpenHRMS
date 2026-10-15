@@ -42,8 +42,9 @@
         'hr_payroll_account_community',
         'hr_gamification',
         'hr_employee_updation',
-        'hr_recruitment',
-        'hr_attendance',
+        # Hoteli lean install: commented out, not installed
+        # 'hr_recruitment',
+        # 'hr_attendance',
         'hr_holidays',
         'hr_payroll_community',
         'hr_expense',
@@ -55,7 +56,8 @@
         'ohrms_salary_advance',
         'hr_reward_warning',
         'hrms_dashboard',
-        'hr_reminder'
+        # Hoteli lean install: commented out, not installed
+        # 'hr_reminder'
     ],
     'data': [
         'security/ir.access.csv',

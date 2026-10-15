@@ -42,6 +42,9 @@ class HrEmployee(models.Model):
             self.env.user.sudo().employee_id.id)
         if not employee:
             raise UserError(_('You must be linked to an employee to record attendance.'))
+        # Hoteli lean install: hr_attendance is optional
+        if 'hr.attendance' not in self.env:
+            raise UserError(_('Attendance is not installed.'))
         latitude = False
         longitude = False
         location = _('Unknown')
@@ -120,23 +123,25 @@ class HrEmployee(models.Model):
                 'project_task_lines': [],
             }]
         
-        attendance_domain = [('employee_id', '=', employee[0]['id'])]
-        if date_from: attendance_domain.append(('check_in', '>=', date_from))
-        if date_to: attendance_domain.append(('check_in', '<=', date_to + ' 23:59:59'))
-        attendance = self.env['hr.attendance'].sudo().search_read(
-            attendance_domain,
-            fields=['id', 'check_in', 'check_out', 'worked_hours'])
+        # Hoteli lean install: hr_attendance is optional
         attendance_line = []
-        for line in attendance:
-            if line['check_in'] and line['check_out']:
-                val = {
-                    'id':line['id'],
-                    'date': line['check_in'].date(),
-                    'sign_in': line['check_in'].time().strftime('%H:%M'),
-                    'sign_out': line['check_out'].time().strftime('%H:%M'),
-                    'worked_hours': format_duration(line['worked_hours'])
-                }
-                attendance_line.append(val)
+        if 'hr.attendance' in self.env:
+            attendance_domain = [('employee_id', '=', employee[0]['id'])]
+            if date_from: attendance_domain.append(('check_in', '>=', date_from))
+            if date_to: attendance_domain.append(('check_in', '<=', date_to + ' 23:59:59'))
+            attendance = self.env['hr.attendance'].sudo().search_read(
+                attendance_domain,
+                fields=['id', 'check_in', 'check_out', 'worked_hours'])
+            for line in attendance:
+                if line['check_in'] and line['check_out']:
+                    val = {
+                        'id':line['id'],
+                        'date': line['check_in'].date(),
+                        'sign_in': line['check_in'].time().strftime('%H:%M'),
+                        'sign_out': line['check_out'].time().strftime('%H:%M'),
+                        'worked_hours': format_duration(line['worked_hours'])
+                    }
+                    attendance_line.append(val)
         leave_domain = [('employee_id', '=', employee[0]['id'])]
         if date_from: leave_domain.append(('request_date_from', '>=', date_from))
         if date_to: leave_domain.append(('request_date_from', '<=', date_to))
@@ -249,7 +254,11 @@ class HrEmployee(models.Model):
             job_domain.append(('id', '=', False))
         if date_from: job_domain.append(('create_date', '>=', date_from))
         if date_to: job_domain.append(('create_date', '<=', date_to + ' 23:59:59'))
-        job_applications = self.env['hr.applicant'].sudo().search_count(job_domain)
+        # Hoteli lean install: hr_recruitment is optional
+        if 'hr.applicant' in self.env:
+            job_applications = self.env['hr.applicant'].sudo().search_count(job_domain)
+        else:
+            job_applications = 0
         if employee:
             leave_domain = "h.state = 'validate'"
             if date_from:
@@ -874,6 +883,10 @@ class HrEmployee(models.Model):
                 'l_month': abbr,
                 'attendance': 0
             })
+
+        # Hoteli lean install: hr_attendance is optional — return zeroed trend
+        if 'hr.attendance' not in self.env:
+            return graph_result
 
         user = self.env.user
         employee = self.env['hr.employee'].search([('user_id', '=', user.id)], limit=1)
