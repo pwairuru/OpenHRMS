@@ -5,10 +5,10 @@
         <field name="name">Dashboard</field>
         <field name="tag">hr_dashboard</field>
     </record>
-<!--  Menu record for dashboard  -->
+<!--  Menu record for dashboard (Hoteli: nested under Employees instead of own main menu) -->
     <menuitem id="hrms_dashboard_menu_root"
               name="Dashboard"
+              parent="hr.menu_hr_root"
               action="hr_action_dashboard"
-              web_icon="hrms_dashboard,static/description/icon.png"
-              sequence="-7" groups="base.group_user"/>
+              sequence="1" groups="base.group_user"/>
 </odoo>
