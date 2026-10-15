@@ -38,13 +38,14 @@ class HrEmployee(models.Model):
 
     def attendance_manual(self):
         """Create and update an attendance for the user employee"""
+        # Hoteli lean install: hr_attendance is optional (checked first:
+        # request is not bound in every context, self.env always is)
+        if 'hr.attendance' not in self.env:
+            raise UserError(_('Attendance is not installed.'))
         employee = request.env['hr.employee'].sudo().browse(
             self.env.user.sudo().employee_id.id)
         if not employee:
             raise UserError(_('You must be linked to an employee to record attendance.'))
-        # Hoteli lean install: hr_attendance is optional
-        if 'hr.attendance' not in self.env:
-            raise UserError(_('Attendance is not installed.'))
         latitude = False
         longitude = False
         location = _('Unknown')
