@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data noupdate="1">
-    </data>
-</odoo>
+<odoo><data noupdate="1">
+<record id="ke_reg_kra" model="hr.contribution.register"><field name="name">KRA - PAYE</field></record>
+<record id="ke_reg_nssf" model="hr.contribution.register"><field name="name">NSSF Kenya</field></record>
+<record id="ke_reg_sha" model="hr.contribution.register"><field name="name">SHA - SHIF</field></record>
+<record id="ke_reg_ahl" model="hr.contribution.register"><field name="name">Housing Levy</field></record>
+</data></odoo>

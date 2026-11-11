@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data noupdate="1">
-    </data>
-</odoo>
+<odoo><data noupdate="1">
+<record id="ke_cat_paye" model="hr.salary.rule.category"><field name="name">Kenya PAYE</field><field name="code">KE_PAYE</field><field name="parent_id" ref="hr_payroll_community.DED"/></record>
+<record id="ke_cat_nssf" model="hr.salary.rule.category"><field name="name">Kenya NSSF</field><field name="code">KE_NSSF</field><field name="parent_id" ref="hr_payroll_community.DED"/></record>
+<record id="ke_cat_shif" model="hr.salary.rule.category"><field name="name">Kenya SHIF</field><field name="code">KE_SHIF</field><field name="parent_id" ref="hr_payroll_community.DED"/></record>
+<record id="ke_cat_ahl" model="hr.salary.rule.category"><field name="name">Kenya Housing Levy</field><field name="code">KE_AHL</field><field name="parent_id" ref="hr_payroll_community.DED"/></record>
+<record id="ke_cat_helb" model="hr.salary.rule.category"><field name="name">Kenya HELB / Loans</field><field name="code">KE_HELB</field><field name="parent_id" ref="hr_payroll_community.DED"/></record>
+<record id="ke_cat_employer" model="hr.salary.rule.category"><field name="name">Kenya Employer Cost</field><field name="code">KE_COMP</field><field name="parent_id" ref="hr_payroll_community.COMP"/></record>
+</data></odoo>
