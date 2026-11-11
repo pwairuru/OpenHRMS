@@ -39,6 +39,7 @@
         'views/res_config_settings_views.xml',
         'wizard/ke_report_wizard_views.xml',
         'report/ke_p9_report.xml',
+        'report/ke_p9_template.xml',
     ],
     'license': 'LGPL-3',
     'installable': True,

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ke_p9_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Kenya P9 Tax Deduction Card — <t t-esc="o.year"/></h2>
+                        <t t-set="rows" t-value="o._get_p9_data()"/>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>KRA PIN</th>
+                                    <th>Gross</th>
+                                    <th>NSSF</th>
+                                    <th>SHIF</th>
+                                    <th>AHL</th>
+                                    <th>PAYE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="rows" t-as="r">
+                                    <td><t t-esc="r['employee']"/></td>
+                                    <td><t t-esc="r['kra_pin']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['gross']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['nssf']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['shif']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['ahl']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['paye']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data>
-    </data>
+    <record id="view_ke_nssf_wizard_form" model="ir.ui.view">
+        <field name="name">ke.nssf.wizard.view.form</field>
+        <field name="model">ke.nssf.wizard</field>
+        <field name="arch" type="xml">
+            <form string="NSSF Report">
+                <group>
+                    <field name="month"/>
+                    <field name="year"/>
+                </group>
+                <footer>
+                    <button name="action_export" string="Export XLSX"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_ke_nssf_wizard" model="ir.actions.act_window">
+        <field name="name">NSSF Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ke.nssf.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="view_ke_shif_wizard_form" model="ir.ui.view">
+        <field name="name">ke.shif.wizard.view.form</field>
+        <field name="model">ke.shif.wizard</field>
+        <field name="arch" type="xml">
+            <form string="SHIF Report">
+                <group>
+                    <field name="month"/>
+                    <field name="year"/>
+                </group>
+                <footer>
+                    <button name="action_export" string="Export XLSX"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_ke_shif_wizard" model="ir.actions.act_window">
+        <field name="name">SHIF Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ke.shif.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="view_ke_p9_wizard_form" model="ir.ui.view">
+        <field name="name">ke.p9.wizard.view.form</field>
+        <field name="model">ke.p9.wizard</field>
+        <field name="arch" type="xml">
+            <form string="P9 Tax Deduction Card">
+                <group>
+                    <field name="year"/>
+                </group>
+                <footer>
+                    <button name="action_print" string="Print PDF"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_ke_p9_wizard" model="ir.actions.act_window">
+        <field name="name">P9 Tax Deduction Card</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ke.p9.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 </odoo>
