@@ -15,7 +15,8 @@
 #    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
 #
 #############################################################################
-from odoo import fields, models
+from odoo import models
+from odoo.exceptions import UserError
 import ast
 
 
@@ -25,4 +26,6 @@ class HrPayslip(models.Model):
     def ke_get_param(self, code):
         self.ensure_one()
         rec = self.env['ke.hr.rule.parameter'].search([('code', '=', code), ('date_from', '<=', self.date_from)], order='date_from desc', limit=1)
-        return ast.literal_eval(rec.value) if rec else None
+        if not rec:
+            raise UserError('Missing KE payroll parameter: %s' % code)
+        return ast.literal_eval(rec.value)

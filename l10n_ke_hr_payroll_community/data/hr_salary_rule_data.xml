@@ -33,7 +33,7 @@
 <field name="amount_select">code</field>
 <field name="amount_python_compute"><![CDATA[nssf = payslip.ke_get_param('ke_nssf')
 pens = min(contract.wage, nssf['uel'])
-result = -min(max(pens, 0.0) * nssf['rate'], 6480.0)]]></field>
+result = -min(max(pens, 0.0) * nssf['rate'], nssf['rate'] * nssf['uel'])]]></field>
 <field name="appears_on_payslip" eval="True"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
@@ -70,7 +70,10 @@ result = -(categories.GROSS * ahl['rate'])]]></field>
 <field name="category_id" ref="hr_payroll_community.DED"/>
 <field name="condition_select">none</field>
 <field name="amount_select">code</field>
-<field name="amount_python_compute"><![CDATA[result = categories.GROSS + categories.KE_SHIF + categories.KE_AHL - min(contract.ke_pension - categories.KE_NSSF, 30000.0) - min(contract.ke_mortgage, 30000.0) - min(contract.ke_post_med, 15000.0)]]></field>
+<field name="amount_python_compute"><![CDATA[pension_cap = payslip.ke_get_param('ke_pension_cap')
+mortgage_cap = payslip.ke_get_param('ke_mortgage_cap')
+post_med_cap = payslip.ke_get_param('ke_post_med_cap')
+result = categories.GROSS + categories.KE_SHIF + categories.KE_AHL - min(contract.ke_pension - categories.KE_NSSF, pension_cap['monthly']) - min(contract.ke_mortgage, mortgage_cap) - min(contract.ke_post_med, post_med_cap)]]></field>
 <field name="appears_on_payslip" eval="False"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
@@ -83,7 +86,22 @@ result = -(categories.GROSS * ahl['rate'])]]></field>
 <field name="condition_select">none</field>
 <field name="amount_select">code</field>
 <field name="amount_python_compute"><![CDATA[bands = payslip.ke_get_param('ke_paye_bands')
-taxable = categories.GROSS + categories.KE_SHIF + categories.KE_AHL - min(contract.ke_pension - categories.KE_NSSF, 30000.0) - min(contract.ke_mortgage, 30000.0) - min(contract.ke_post_med, 15000.0)
+disability = payslip.ke_get_param('ke_disability')
+ins = payslip.ke_get_param('ke_insurance')
+taxable = KE_TAXABLE
+# Disability exemption needs a valid certificate: first ke_disability of taxable pay is exempt.
+if contract.ke_disabled and contract.ke_disability_cert:
+    taxable = max(KE_TAXABLE - disability, 0.0)
+# Non-resident employees get no reliefs and no pension/mortgage deduction.
+# KE_TAXABLE already deducted them, so add those two deductions back here.
+try:
+    nonresident = bool(contract.ke_nonresident)
+except AttributeError:
+    nonresident = False
+if nonresident:
+    pension_cap = payslip.ke_get_param('ke_pension_cap')
+    mortgage_cap = payslip.ke_get_param('ke_mortgage_cap')
+    taxable = taxable + min(contract.ke_pension - categories.KE_NSSF, pension_cap['monthly']) + min(contract.ke_mortgage, mortgage_cap)
 tax = 0.0
 base = 0.0
 for width, rate in bands:
@@ -93,8 +111,12 @@ for width, rate in bands:
     base += w
     if taxable <= base:
         break
-relief = 0.0 if contract.ke_secondary else payslip.ke_get_param('ke_personal_relief')
-ins_relief = min(0.15 * (contract.ke_insurance_life + contract.ke_insurance_health + contract.ke_insurance_edu), 5000.0)
+relief = 0.0
+ins_relief = 0.0
+if not contract.ke_secondary and not nonresident:
+    relief = payslip.ke_get_param('ke_personal_relief')
+if not nonresident:
+    ins_relief = min(ins['rate'] * (contract.ke_insurance_life + contract.ke_insurance_health + contract.ke_insurance_edu), ins['monthly_max'])
 result = -max(tax - relief - ins_relief, 0.0)]]></field>
 <field name="appears_on_payslip" eval="True"/>
 <field name="company_id" ref="base.main_company"/>
@@ -110,10 +132,40 @@ result = -max(tax - relief - ins_relief, 0.0)]]></field>
 <field name="appears_on_payslip" eval="True"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
+<record id="ke_rule_helb" model="hr.salary.rule">
+<field name="name">HELB Deduction</field>
+<field name="sequence" eval="120"/>
+<field name="code">KE_HELB</field>
+<field name="category_id" ref="ke_cat_helb"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[result = -(contract.ke_helb or 0.0)]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_fringe_info" model="hr.salary.rule">
+<field name="name">Fringe Benefit (info)</field>
+<field name="sequence" eval="125"/>
+<field name="code">KE_FRINGE_INFO</field>
+<field name="category_id" ref="ke_cat_employer"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[mkt = payslip.ke_get_param('ke_fringe_rate')
+# Informational only: employer fringe benefit tax is computed off-slip at
+# 30% x (mkt - contract.ke_loan_rate) x contract.ke_loan_balance / 12.
+result = 0.0]]></field>
+<field name="appears_on_payslip" eval="False"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
 <!-- Attach the KE rules to the regular structure (engine links rules via
      structure.rule_ids; hr.salary.rule has no struct_ids field). -->
 <record id="ke_structure_regular" model="hr.payroll.structure">
-<field name="rule_ids" eval="[(6, 0, [ref('ke_rule_basic'), ref('ke_rule_gross'), ref('ke_rule_nssf'), ref('ke_rule_shif'), ref('ke_rule_ahl'), ref('ke_rule_taxable'), ref('ke_rule_paye'), ref('ke_rule_net')])]"/>
+<field name="rule_ids" eval="[(6, 0, [ref('ke_rule_basic'), ref('ke_rule_gross'), ref('ke_rule_nssf'), ref('ke_rule_shif'), ref('ke_rule_ahl'), ref('ke_rule_taxable'), ref('ke_rule_paye'), ref('ke_rule_net'), ref('ke_rule_helb'), ref('ke_rule_fringe_info')])]"/>
+</record>
+<!-- Bonus slips run the tax chain only (no NSSF/SHIF/AHL/HELB/fringe):
+     same records shared, no copies; absent categories read as 0.0. -->
+<record id="ke_structure_bonus" model="hr.payroll.structure">
+<field name="rule_ids" eval="[(6, 0, [ref('ke_rule_basic'), ref('ke_rule_gross'), ref('ke_rule_taxable'), ref('ke_rule_paye'), ref('ke_rule_net')])]"/>
 </record>
 </data>
 </odoo>
