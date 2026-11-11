@@ -18,3 +18,4 @@
 from . import ke_rule_parameter
 from . import hr_version
 from . import hr_payslip
+from . import res_config_settings
