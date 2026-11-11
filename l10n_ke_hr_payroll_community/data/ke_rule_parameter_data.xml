@@ -15,6 +15,16 @@
 <field name="date_from" eval="datetime(2026, 2, 1).date()"/>
 <field name="value">{'lel': 9000.0, 'uel': 108000.0, 'rate': 0.06}</field>
 </record>
+<record id="ke_nssf_2025" model="ke.hr.rule.parameter">
+<field name="name">KE NSSF Year 3</field><field name="code">ke_nssf</field>
+<field name="date_from" eval="datetime(2025, 2, 1).date()"/>
+<field name="value">{'lel': 8000.0, 'uel': 72000.0, 'rate': 0.06}</field>
+</record>
+<record id="ke_nssf_2024" model="ke.hr.rule.parameter">
+<field name="name">KE NSSF Year 2</field><field name="code">ke_nssf</field>
+<field name="date_from" eval="datetime(2024, 2, 1).date()"/>
+<field name="value">{'lel': 7000.0, 'uel': 36000.0, 'rate': 0.06}</field>
+</record>
 <record id="ke_shif_2024" model="ke.hr.rule.parameter">
 <field name="name">KE SHIF</field><field name="code">ke_shif</field>
 <field name="date_from" eval="datetime(2024, 10, 1).date()"/>
