@@ -57,9 +57,13 @@
 <field name="name">KE disability exemption</field><field name="code">ke_disability</field>
 <field name="date_from" eval="datetime(2010, 3, 10).date()"/><field name="value">150000.0</field>
 </record>
+<record id="ke_fringe_2026q1q3" model="ke.hr.rule.parameter">
+<field name="name">KE fringe market rate Q1-Q3 2026</field><field name="code">ke_fringe_rate</field>
+<field name="date_from" eval="datetime(2026, 1, 1).date()"/><field name="value">0.08</field>
+</record>
 <record id="ke_fringe_2026q4" model="ke.hr.rule.parameter">
-<field name="name">KE fringe market rate 2026</field><field name="code">ke_fringe_rate</field>
-<field name="date_from" eval="datetime(2026, 1, 1).date()"/><field name="value">0.09</field>
+<field name="name">KE fringe market rate Q4-2026</field><field name="code">ke_fringe_rate</field>
+<field name="date_from" eval="datetime(2026, 10, 1).date()"/><field name="value">0.09</field>
 </record>
 </data>
 </odoo>
