@@ -8,32 +8,43 @@
      search matches nothing and the leg stays empty (no install error);
      installing/upgrading this module after the chart resolves the legs
      (this file is NOT noupdate, so upgrades re-apply the searches).
-     Balance for a plain 100k slip: debit 5109 100000 =
-     credits 2230 6000 + 2231 2750 + 2102 1500 + 2210 19308.35 + 2220 70441.65.
-     NOTE: the core l10n_ke chart has no dedicated Affordable Housing Levy
-     payable account, so KE_AHL credits 2102 Other Creditors. Revisit if the
-     chart gains an AHL account. -->
+     Balance for a plain 100k slip: debit 630000 100000 =
+     credits 230100 29558.35 (6000 + 2750 + 1500 + 19308.35) +
+     230000 70441.65.
+     Deduction rules carry both legs (debit 630000 Salary Expenses, credit
+     230100 Employee Payroll Taxes) so Done slips post correctly-sided
+     moves; the upstream adjustment entry absorbs the gross-up difference
+     on the journal default account.
+     NOTE: the core l10n_ke chart has no per-levy payable accounts, so all
+     employee-side statutory credits (NSSF/SHIF/AHL/PAYE/HELB) post to
+     230100 Employee Payroll Taxes and NET posts to 230000 Salary Payable.
+     Revisit if the chart gains dedicated levy accounts. -->
 <data>
 <record id="l10n_ke_hr_payroll_community.ke_rule_basic" model="hr.salary.rule">
-<field name="account_debit_id" search="[('code', '=', '5109'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_nssf" model="hr.salary.rule">
-<field name="account_credit_id" search="[('code', '=', '2230'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_shif" model="hr.salary.rule">
-<field name="account_credit_id" search="[('code', '=', '2231'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_ahl" model="hr.salary.rule">
-<field name="account_credit_id" search="[('code', '=', '2102'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_paye" model="hr.salary.rule">
-<field name="account_credit_id" search="[('code', '=', '2210'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_net" model="hr.salary.rule">
-<field name="account_credit_id" search="[('code', '=', '2220'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230000'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_helb" model="hr.salary.rule">
-<field name="account_credit_id" search="[('code', '=', '2232'), ('company_id', '=', ref('base.main_company'))]"/>
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <!-- ke_rule_gross / ke_rule_taxable / ke_rule_fringe_info stay account-less:
      subtotal / informational lines must not post. -->

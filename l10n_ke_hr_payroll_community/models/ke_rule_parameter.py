@@ -37,7 +37,10 @@ class KeHrRuleParameter(models.Model):
         check_company=True,
     )
 
-    _sql_constraints = [('code_date_company_uniq', 'unique(code, date_from, company_id)', 'Duplicate parameter value')]
+    _code_date_company_uniq = models.Constraint(
+        'UNIQUE (code, date_from, company_id)',
+        'Duplicate parameter value',
+    )
 
     @api.model
     def get_value(self, code, date=None):

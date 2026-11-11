@@ -10,6 +10,7 @@
                 <field name="ke_mortgage"/>
                 <field name="ke_post_med"/>
                 <field name="ke_secondary"/>
+                <field name="ke_nonresident"/>
                 <field name="ke_disabled"/>
                 <field name="ke_helb"/>
             </xpath>

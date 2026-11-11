@@ -2,10 +2,12 @@
 <odoo><data noupdate="1">
 <record id="ke_structure_regular" model="hr.payroll.structure">
 <field name="name">Kenya: Regular Pay</field><field name="code">KE_REGULAR</field>
+<field name="parent_id" eval="False"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
 <record id="ke_structure_bonus" model="hr.payroll.structure">
 <field name="name">Kenya: Bonus</field><field name="code">KE_BONUS</field>
+<field name="parent_id" eval="False"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.structure_type_ke_employee" model="hr.payroll.structure.type">

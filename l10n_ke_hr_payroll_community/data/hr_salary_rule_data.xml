@@ -94,10 +94,7 @@ if contract.ke_disabled and contract.ke_disability_cert:
     taxable = max(KE_TAXABLE - disability, 0.0)
 # Non-resident employees get no reliefs and no pension/mortgage deduction.
 # KE_TAXABLE already deducted them, so add those two deductions back here.
-try:
-    nonresident = bool(contract.ke_nonresident)
-except AttributeError:
-    nonresident = False
+nonresident = bool(contract.ke_nonresident)
 if nonresident:
     pension_cap = payslip.ke_get_param('ke_pension_cap')
     mortgage_cap = payslip.ke_get_param('ke_mortgage_cap')

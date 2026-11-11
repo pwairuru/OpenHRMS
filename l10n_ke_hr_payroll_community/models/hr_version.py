@@ -30,6 +30,7 @@ class HrVersion(models.Model):
     ke_disabled = fields.Boolean(string='Disabled (certified)')
     ke_disability_cert = fields.Char(string='Disability cert no')
     ke_secondary = fields.Boolean(string='Secondary employer contract')
+    ke_nonresident = fields.Boolean(string='Non-resident (no reliefs)')
     ke_kra_pin = fields.Char(string='KRA PIN')
     ke_nssf_no = fields.Char(string='NSSF number')
     ke_shif_no = fields.Char(string='SHIF number')
