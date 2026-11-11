@@ -80,11 +80,17 @@ class KeNssfWizard(models.TransientModel):
                 slip.employee_id.name,
                 slip.employee_id.identification_id,
                 slip.contract_id.ke_nssf_no,
-                _line_total(slip, 'KE_NSSF'),
+                _line_total(slip, 'KE_NSSF_T1'),
+                _line_total(slip, 'KE_NSSF_T2'),
+                _line_total(slip, 'KE_NSSF_T1')
+                + _line_total(slip, 'KE_NSSF_T2'),
             ])
         if not rows:
             raise UserError('No Done payslips for period')
-        return _xlsx_download(rows, ['Name', 'ID No', 'NSSF No', 'Amount'], 'NSSF')
+        return _xlsx_download(
+            rows,
+            ['Name', 'ID No', 'NSSF No', 'Tier I', 'Tier II', 'Total'],
+            'NSSF')
 
 
 class KeShifWizard(models.TransientModel):
@@ -149,7 +155,8 @@ class KeP9Wizard(models.TransientModel):
             })
             agg['gross'] += sum(
                 slip.line_ids.filtered(lambda l: l.code == 'KE_GROSS').mapped('total'))
-            agg['nssf'] += _line_total(slip, 'KE_NSSF')
+            agg['nssf'] += (_line_total(slip, 'KE_NSSF_T1')
+                            + _line_total(slip, 'KE_NSSF_T2'))
             agg['shif'] += _line_total(slip, 'KE_SHIF')
             agg['ahl'] += _line_total(slip, 'KE_AHL')
             agg['paye'] += _line_total(slip, 'KE_PAYE')

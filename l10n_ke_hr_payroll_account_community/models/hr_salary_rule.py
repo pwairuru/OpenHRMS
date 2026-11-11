@@ -30,8 +30,10 @@ from odoo import models
 # resolved.
 KE_RULE_ACCOUNT_MAPPING = [
     ('l10n_ke_hr_payroll_community.ke_rule_basic', 'account_debit_id', '630000'),
-    ('l10n_ke_hr_payroll_community.ke_rule_nssf', 'account_debit_id', '630000'),
-    ('l10n_ke_hr_payroll_community.ke_rule_nssf', 'account_credit_id', '230100'),
+    ('l10n_ke_hr_payroll_community.ke_rule_nssf_t1', 'account_debit_id', '630000'),
+    ('l10n_ke_hr_payroll_community.ke_rule_nssf_t1', 'account_credit_id', '230100'),
+    ('l10n_ke_hr_payroll_community.ke_rule_nssf_t2', 'account_debit_id', '630000'),
+    ('l10n_ke_hr_payroll_community.ke_rule_nssf_t2', 'account_credit_id', '230100'),
     ('l10n_ke_hr_payroll_community.ke_rule_shif', 'account_debit_id', '630000'),
     ('l10n_ke_hr_payroll_community.ke_rule_shif', 'account_credit_id', '230100'),
     ('l10n_ke_hr_payroll_community.ke_rule_ahl', 'account_debit_id', '630000'),

@@ -20,8 +20,8 @@
 How it works: this loader reads every ``tests/vectors/*.json`` file and
 replays the shipped rule-body math from
 ``l10n_ke_hr_payroll_community/data/hr_salary_rule_data.xml``
-(KE_NSSF / KE_SHIF / KE_AHL / KE_TAXABLE / KE_PAYE / KE_NET) against the
-dated parameters in ``data/ke_rule_parameter_data.xml``. It is a
+(KE_NSSF_T1 / KE_NSSF_T2 / KE_SHIF / KE_AHL / KE_TAXABLE / KE_PAYE /
+KE_NET) against the dated parameters in ``data/ke_rule_parameter_data.xml``. It is a
 standalone mirror, NOT a full-payslip run -- the full-payslip oracle
 (100k March-2026 + cap/floor/move-sides) lives in
 ``test_ke_salary_rules.py``, which needs a database. Both must agree;
@@ -36,7 +36,7 @@ Vector JSON schema (all amounts KES, magnitudes, not signs)::
      "insurance": {"life": N, "health": 0, "edu": 0},
      "disabled": false, "cert": null, "secondary": false,
      "nonresident": false,
-     "expected": {"nssf": N, "shif": N, "ahl": N,
+     "expected": {"nssf": N, "t1": N, "t2": N, "shif": N, "ahl": N,
                   "taxable": N, "paye": N, "net": N},
      "note": "..."}
 
@@ -88,7 +88,7 @@ def compute(vector):
     """Mirror of the shipped KE rule bodies. Returns signed amounts."""
     gross = float(vector['gross'])
     date = datetime.date.fromisoformat(vector['date'])
-    _lel, uel, rate = _nssf_for(date)
+    lel, uel, rate = _nssf_for(date)
     pension = float(vector.get('pension') or 0.0)
     mortgage = float(vector.get('mortgage') or 0.0)
     post_med = float(vector.get('post_med') or 0.0)
@@ -100,7 +100,10 @@ def compute(vector):
     cert = vector.get('cert')
     secondary = bool(vector.get('secondary'))
 
-    nssf = -min(max(min(gross, uel), 0.0) * rate, rate * uel)
+    # Statutory tier split: Tier I on first LEL, Tier II on LEL..UEL.
+    t1 = -min(max(gross, 0.0), lel) * rate
+    t2 = -max(min(gross, uel) - lel, 0.0) * rate
+    nssf = t1 + t2
     shif = -max(gross * SHIF_RATE, SHIF_MIN)
     ahl = -(gross * AHL_RATE)
     # Pension deduction = min(voluntary + NSSF, monthly cap, 30% of
@@ -134,7 +137,7 @@ def compute(vector):
                          INSURANCE_MAX)
     paye = -max(tax - relief - ins_relief, 0.0)
     net = gross + nssf + shif + ahl + paye
-    return {'nssf': nssf, 'shif': shif, 'ahl': ahl,
+    return {'nssf': nssf, 't1': t1, 't2': t2, 'shif': shif, 'ahl': ahl,
             'taxable': taxable, 'paye': paye, 'net': net}
 
 

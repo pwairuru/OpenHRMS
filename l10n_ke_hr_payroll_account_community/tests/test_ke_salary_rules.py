@@ -24,7 +24,8 @@ class TestKeRules(TransactionCase):
     """Oracle + mapping tests for the Kenya payroll accounting bridge.
 
     Oracle vector (wage=100000, March 2026, default contract flags):
-    NSSF -6000 / SHIF -2750 / AHL -1500 / PAYE -19308.35 / NET 70441.65.
+    NSSF Tier I -540 / Tier II -5460 / SHIF -2750 / AHL -1500 /
+    PAYE -19308.35 / NET 70441.65.
     """
 
     # (rule xmlid, leg field, expected l10n_ke account code), shared with
@@ -117,7 +118,8 @@ class TestKeRules(TransactionCase):
         totals = self._totals(self._make_slip(100000))
         self.assertEqual(totals['KE_BASIC'], 100000.0)
         self.assertEqual(totals['KE_GROSS'], 100000.0)
-        self.assertEqual(totals['KE_NSSF'], -6000.0)
+        self.assertEqual(totals['KE_NSSF_T1'], -540.0)
+        self.assertEqual(totals['KE_NSSF_T2'], -5460.0)
         self.assertEqual(totals['KE_SHIF'], -2750.0)
         self.assertEqual(totals['KE_AHL'], -1500.0)
         self.assertAlmostEqual(totals['KE_PAYE'], -19308.35, places=2)
@@ -125,14 +127,21 @@ class TestKeRules(TransactionCase):
 
     def test_nssf_cap_200k(self):
         totals = self._totals(self._make_slip(200000))
-        self.assertEqual(totals['KE_NSSF'], -6480.0)
+        self.assertEqual(totals['KE_NSSF_T1'], -540.0)
+        self.assertEqual(totals['KE_NSSF_T2'], -5940.0)
+
+    def test_nssf_sub_lel_5k(self):
+        totals = self._totals(self._make_slip(5000))
+        self.assertEqual(totals['KE_NSSF_T1'], -300.0)
+        self.assertEqual(totals['KE_NSSF_T2'], 0.0)
 
     def test_pre2026_slip_feb2025(self):
         """Feb-2025 100k slip (test_data payslip2): pre-2026 fringe gap
         must not break compute; NSSF Year-3 (UEL 72000) applies."""
         totals = self._totals(self._make_slip(
             100000, date_from='2025-02-01', date_to='2025-02-28'))
-        self.assertEqual(totals['KE_NSSF'], -4320.0)
+        self.assertEqual(totals['KE_NSSF_T1'], -480.0)
+        self.assertEqual(totals['KE_NSSF_T2'], -3840.0)
         self.assertEqual(totals['KE_SHIF'], -2750.0)
         self.assertEqual(totals['KE_AHL'], -1500.0)
         self.assertAlmostEqual(totals['KE_PAYE'], -19812.36, delta=0.05)

@@ -23,17 +23,32 @@
 <field name="appears_on_payslip" eval="True"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
-<record id="ke_rule_nssf" model="hr.salary.rule">
-<field name="name">NSSF Employee</field>
-<field name="sequence" eval="110"/>
-<field name="code">KE_NSSF</field>
+<record id="ke_rule_nssf_t1" model="hr.salary.rule">
+<field name="name">NSSF Tier I (Employee)</field>
+<field name="sequence" eval="109"/>
+<field name="code">KE_NSSF_T1</field>
 <field name="category_id" ref="ke_cat_nssf"/>
 <field name="register_id" ref="ke_reg_nssf"/>
 <field name="condition_select">none</field>
 <field name="amount_select">code</field>
 <field name="amount_python_compute"><![CDATA[nssf = payslip.ke_get_param('ke_nssf')
-pens = min(contract.wage, nssf['uel'])
-result = -min(max(pens, 0.0) * nssf['rate'], nssf['rate'] * nssf['uel'])]]></field>
+# Tier I: 6% of pensionable earnings up to the Lower Earnings Limit.
+result = -min(max(contract.wage, 0.0), nssf['lel']) * nssf['rate']]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_nssf_t2" model="hr.salary.rule">
+<field name="name">NSSF Tier II (Employee)</field>
+<field name="sequence" eval="110"/>
+<field name="code">KE_NSSF_T2</field>
+<field name="category_id" ref="ke_cat_nssf"/>
+<field name="register_id" ref="ke_reg_nssf"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[nssf = payslip.ke_get_param('ke_nssf')
+# Tier II: 6% of pensionable earnings above LEL up to UEL (may be
+# contracted out to an approved scheme; Tier I always goes to NSSF).
+result = -max(min(contract.wage, nssf['uel']) - nssf['lel'], 0.0) * nssf['rate']]]></field>
 <field name="appears_on_payslip" eval="True"/>
 <field name="company_id" ref="base.main_company"/>
 </record>
@@ -166,7 +181,7 @@ result = 0.0]]></field>
 <!-- Attach the KE rules to the regular structure (engine links rules via
      structure.rule_ids; hr.salary.rule has no struct_ids field). -->
 <record id="ke_structure_regular" model="hr.payroll.structure">
-<field name="rule_ids" eval="[(6, 0, [ref('ke_rule_basic'), ref('ke_rule_gross'), ref('ke_rule_nssf'), ref('ke_rule_shif'), ref('ke_rule_ahl'), ref('ke_rule_taxable'), ref('ke_rule_paye'), ref('ke_rule_net'), ref('ke_rule_helb'), ref('ke_rule_fringe_info')])]"/>
+<field name="rule_ids" eval="[(6, 0, [ref('ke_rule_basic'), ref('ke_rule_gross'), ref('ke_rule_nssf_t1'), ref('ke_rule_nssf_t2'), ref('ke_rule_shif'), ref('ke_rule_ahl'), ref('ke_rule_taxable'), ref('ke_rule_paye'), ref('ke_rule_net'), ref('ke_rule_helb'), ref('ke_rule_fringe_info')])]"/>
 </record>
 <!-- Bonus slips run the tax chain only (no NSSF/SHIF/AHL/HELB/fringe):
      same records shared, no copies; absent categories read as 0.0. -->

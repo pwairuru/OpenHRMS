@@ -23,7 +23,11 @@
 <record id="l10n_ke_hr_payroll_community.ke_rule_basic" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
-<record id="l10n_ke_hr_payroll_community.ke_rule_nssf" model="hr.salary.rule">
+<record id="l10n_ke_hr_payroll_community.ke_rule_nssf_t1" model="hr.salary.rule">
+<field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+</record>
+<record id="l10n_ke_hr_payroll_community.ke_rule_nssf_t2" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
 <field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
