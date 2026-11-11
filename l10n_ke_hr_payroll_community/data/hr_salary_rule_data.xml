@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data noupdate="1">
-    </data>
+<data noupdate="1">
+<record id="ke_rule_basic" model="hr.salary.rule">
+<field name="name">Basic Salary</field>
+<field name="sequence" eval="1"/>
+<field name="code">KE_BASIC</field>
+<field name="category_id" ref="hr_payroll_community.BASIC"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[result = contract.wage]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_gross" model="hr.salary.rule">
+<field name="name">Gross</field>
+<field name="sequence" eval="100"/>
+<field name="code">KE_GROSS</field>
+<field name="category_id" ref="hr_payroll_community.GROSS"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[result = categories.BASIC + categories.ALW]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_nssf" model="hr.salary.rule">
+<field name="name">NSSF Employee</field>
+<field name="sequence" eval="110"/>
+<field name="code">KE_NSSF</field>
+<field name="category_id" ref="ke_cat_nssf"/>
+<field name="register_id" ref="ke_reg_nssf"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[nssf = payslip.ke_get_param('ke_nssf')
+pens = min(contract.wage, nssf['uel'])
+result = -min(max(pens, 0.0) * nssf['rate'], 6480.0)]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_shif" model="hr.salary.rule">
+<field name="name">SHIF</field>
+<field name="sequence" eval="111"/>
+<field name="code">KE_SHIF</field>
+<field name="category_id" ref="ke_cat_shif"/>
+<field name="register_id" ref="ke_reg_sha"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[shif = payslip.ke_get_param('ke_shif')
+result = -max(categories.GROSS * shif['rate'], shif['minimum'])]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_ahl" model="hr.salary.rule">
+<field name="name">Housing Levy</field>
+<field name="sequence" eval="112"/>
+<field name="code">KE_AHL</field>
+<field name="category_id" ref="ke_cat_ahl"/>
+<field name="register_id" ref="ke_reg_ahl"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[ahl = payslip.ke_get_param('ke_ahl')
+result = -(categories.GROSS * ahl['rate'])]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_taxable" model="hr.salary.rule">
+<field name="name">Taxable Pay</field>
+<field name="sequence" eval="113"/>
+<field name="code">KE_TAXABLE</field>
+<field name="category_id" ref="hr_payroll_community.DED"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[result = categories.GROSS + categories.KE_SHIF + categories.KE_AHL - min(contract.ke_pension - categories.KE_NSSF, 30000.0) - min(contract.ke_mortgage, 30000.0) - min(contract.ke_post_med, 15000.0)]]></field>
+<field name="appears_on_payslip" eval="False"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_paye" model="hr.salary.rule">
+<field name="name">PAYE</field>
+<field name="sequence" eval="115"/>
+<field name="code">KE_PAYE</field>
+<field name="category_id" ref="ke_cat_paye"/>
+<field name="register_id" ref="ke_reg_kra"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[bands = payslip.ke_get_param('ke_paye_bands')
+taxable = categories.GROSS + categories.KE_SHIF + categories.KE_AHL - min(contract.ke_pension - categories.KE_NSSF, 30000.0) - min(contract.ke_mortgage, 30000.0) - min(contract.ke_post_med, 15000.0)
+tax = 0.0
+base = 0.0
+for width, rate in bands:
+    w = width if width > 0 else float('inf')
+    chunk = min(max(taxable - base, 0.0), w)
+    tax += chunk * rate
+    base += w
+    if taxable <= base:
+        break
+relief = 0.0 if contract.ke_secondary else payslip.ke_get_param('ke_personal_relief')
+ins_relief = min(0.15 * (contract.ke_insurance_life + contract.ke_insurance_health + contract.ke_insurance_edu), 5000.0)
+result = -max(tax - relief - ins_relief, 0.0)]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_net" model="hr.salary.rule">
+<field name="name">Net Salary</field>
+<field name="sequence" eval="200"/>
+<field name="code">KE_NET</field>
+<field name="category_id" ref="hr_payroll_community.NET"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[result = categories.GROSS + categories.KE_NSSF + categories.KE_SHIF + categories.KE_AHL + categories.KE_PAYE + categories.KE_HELB]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<!-- Attach the KE rules to the regular structure (engine links rules via
+     structure.rule_ids; hr.salary.rule has no struct_ids field). -->
+<record id="ke_structure_regular" model="hr.payroll.structure">
+<field name="rule_ids" eval="[(6, 0, [ref('ke_rule_basic'), ref('ke_rule_gross'), ref('ke_rule_nssf'), ref('ke_rule_shif'), ref('ke_rule_ahl'), ref('ke_rule_taxable'), ref('ke_rule_paye'), ref('ke_rule_net')])]"/>
+</record>
+</data>
 </odoo>
