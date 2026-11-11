@@ -115,7 +115,7 @@ relief = 0.0
 ins_relief = 0.0
 if not contract.ke_secondary and not nonresident:
     relief = payslip.ke_get_param('ke_personal_relief')
-if not nonresident:
+if not contract.ke_secondary and not nonresident:
     ins_relief = min(ins['rate'] * (contract.ke_insurance_life + contract.ke_insurance_health + contract.ke_insurance_edu), ins['monthly_max'])
 result = -max(tax - relief - ins_relief, 0.0)]]></field>
 <field name="appears_on_payslip" eval="True"/>
