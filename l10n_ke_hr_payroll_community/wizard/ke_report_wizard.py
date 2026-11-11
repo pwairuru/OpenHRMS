@@ -24,8 +24,13 @@ from odoo.exceptions import UserError
 
 
 def _period_slips(wizard):
-    """Done, primary-contract payslips for the wizard's month/year."""
-    slips = wizard.env['hr.payslip'].search([('state', '=', 'done')])
+    """Done or paid, primary-contract payslips for the wizard's month/year.
+
+    Paid slips are final payroll records and must appear in statutory
+    statements; filtering on done-only hid every paid month.
+    """
+    slips = wizard.env['hr.payslip'].search(
+        [('state', 'in', ('done', 'paid'))])
     month = int(wizard.month)
     return slips.filtered(
         lambda s: s.date_from
@@ -33,6 +38,15 @@ def _period_slips(wizard):
         and s.date_from.year == wizard.year
         and not s.contract_id.ke_secondary
     )
+
+
+def _nssf_total(slip):
+    """Employee NSSF on a slip: Tier I + Tier II, plus the pre-split
+    KE_NSSF line so statements stay correct for slips computed before
+    the 20.0.1.0.2 tier split (a slip never carries both)."""
+    return abs(sum(slip.line_ids.filtered(
+        lambda l: l.code in ('KE_NSSF_T1', 'KE_NSSF_T2', 'KE_NSSF')
+    ).mapped('total')))
 
 
 def _line_total(slip, code):
@@ -76,14 +90,14 @@ class KeNssfWizard(models.TransientModel):
         slips = _period_slips(self)
         rows = []
         for slip in slips:
+            total = _nssf_total(slip)
             rows.append([
                 slip.employee_id.name,
                 slip.employee_id.identification_id,
                 slip.contract_id.ke_nssf_no,
                 _line_total(slip, 'KE_NSSF_T1'),
                 _line_total(slip, 'KE_NSSF_T2'),
-                _line_total(slip, 'KE_NSSF_T1')
-                + _line_total(slip, 'KE_NSSF_T2'),
+                total,
             ])
         if not rows:
             raise UserError('No Done payslips for period')
@@ -132,8 +146,9 @@ class KeP9Wizard(models.TransientModel):
     )
 
     def _get_p9_data(self):
-        """Per-employee yearly totals from Done slips: gross/nssf/shif/ahl/paye."""
-        slips = self.env['hr.payslip'].search([('state', '=', 'done')])
+        """Per-employee yearly totals from done/paid slips: gross/nssf/shif/ahl/paye."""
+        slips = self.env['hr.payslip'].search(
+            [('state', 'in', ('done', 'paid'))])
         slips = slips.filtered(
             lambda s: s.date_from
             and s.date_from.year == self.year
@@ -155,8 +170,7 @@ class KeP9Wizard(models.TransientModel):
             })
             agg['gross'] += sum(
                 slip.line_ids.filtered(lambda l: l.code == 'KE_GROSS').mapped('total'))
-            agg['nssf'] += (_line_total(slip, 'KE_NSSF_T1')
-                            + _line_total(slip, 'KE_NSSF_T2'))
+            agg['nssf'] += _nssf_total(slip)
             agg['shif'] += _line_total(slip, 'KE_SHIF')
             agg['ahl'] += _line_total(slip, 'KE_AHL')
             agg['paye'] += _line_total(slip, 'KE_PAYE')
