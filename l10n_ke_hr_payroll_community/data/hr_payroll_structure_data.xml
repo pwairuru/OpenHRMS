@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data noupdate="1">
-    </data>
-</odoo>
+<odoo><data noupdate="1">
+<record id="ke_structure_regular" model="hr.payroll.structure">
+<field name="name">Kenya: Regular Pay</field><field name="code">KE_REGULAR</field>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_structure_bonus" model="hr.payroll.structure">
+<field name="name">Kenya: Bonus</field><field name="code">KE_BONUS</field>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="l10n_ke_hr_payroll_community.structure_type_ke_employee" model="hr.payroll.structure.type">
+<field name="default_struct_id" ref="l10n_ke_hr_payroll_community.ke_structure_regular"/>
+</record>
+</data></odoo>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Stub: full Kenya employee structure type lands in Task 4
-         (XML id l10n_ke_hr_payroll_community.structure_type_ke_employee). -->
-    <data noupdate="1">
-    </data>
-</odoo>
+<odoo><data noupdate="1">
+<record id="structure_type_ke_employee" model="hr.payroll.structure.type">
+<field name="name">Kenya: Employee</field>
+<field name="country_id" ref="base.ke"/>
+</record>
+</data></odoo>
