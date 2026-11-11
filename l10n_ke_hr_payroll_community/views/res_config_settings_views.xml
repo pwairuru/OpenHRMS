@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<record id="res_config_settings_view_form_ke" model="ir.ui.view">
-<field name="name">res.config.settings.view.form.ke</field><field name="model">res.config.settings</field>
-<field name="inherit_id" ref="hr_payroll_community.res_config_settings_view_form"/>
-<field name="arch" type="xml">
-<xpath expr="//field[@name='module_l10n_in_hr_payroll']" position="after">
-<field name="module_l10n_ke_hr_payroll_community"/>
-</xpath>
-<xpath expr="//field[@name='module_account_accountant']" position="after">
-<field name="module_hr_payroll_account_community"/>
-</xpath>
-</field>
-</record>
+    <record id="res_config_settings_view_form_ke" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.ke</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_payroll_community.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='module_l10n_in_hr_payroll']" position="after">
+                <field name="module_l10n_ke_hr_payroll_community"/>
+            </xpath>
+            <xpath expr="//field[@name='module_account_accountant']" position="after">
+                <field name="module_hr_payroll_account_community"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
