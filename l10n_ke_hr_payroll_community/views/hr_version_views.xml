@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data>
-    </data>
+    <record id="view_hr_version_form_ke" model="ir.ui.view">
+        <field name="name">hr.version.form.ke</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_contract_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='other_allowance']" position="after">
+                <field name="ke_pension"/>
+                <field name="ke_mortgage"/>
+                <field name="ke_post_med"/>
+                <field name="ke_secondary"/>
+                <field name="ke_disabled"/>
+                <field name="ke_helb"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
