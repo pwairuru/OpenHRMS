@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Stub: full content lands in a later task. -->
-    <data noupdate="1">
-    </data>
+<data noupdate="1">
+<record id="ke_paye_bands_2023" model="ke.hr.rule.parameter">
+<field name="name">KE PAYE bands (monthly)</field><field name="code">ke_paye_bands</field>
+<field name="date_from" eval="datetime(2023, 7, 1).date()"/>
+<field name="value">[[24000, 0.10], [8333, 0.25], [467667, 0.30], [300000, 0.325], [0, 0.35]]</field>
+</record>
+<record id="ke_personal_relief_2020" model="ke.hr.rule.parameter">
+<field name="name">KE personal relief</field><field name="code">ke_personal_relief</field>
+<field name="date_from" eval="datetime(2020, 4, 25).date()"/><field name="value">2400.0</field>
+</record>
+<record id="ke_nssf_2026" model="ke.hr.rule.parameter">
+<field name="name">KE NSSF Year 4</field><field name="code">ke_nssf</field>
+<field name="date_from" eval="datetime(2026, 2, 1).date()"/>
+<field name="value">{'lel': 9000.0, 'uel': 108000.0, 'rate': 0.06}</field>
+</record>
+<record id="ke_shif_2024" model="ke.hr.rule.parameter">
+<field name="name">KE SHIF</field><field name="code">ke_shif</field>
+<field name="date_from" eval="datetime(2024, 10, 1).date()"/>
+<field name="value">{'rate': 0.0275, 'minimum': 300.0}</field>
+</record>
+<record id="ke_ahl_2024" model="ke.hr.rule.parameter">
+<field name="name">KE Housing Levy</field><field name="code">ke_ahl</field>
+<field name="date_from" eval="datetime(2024, 3, 19).date()"/>
+<field name="value">{'rate': 0.015}</field>
+</record>
+<record id="ke_pension_cap_2024" model="ke.hr.rule.parameter">
+<field name="name">KE pension cap</field><field name="code">ke_pension_cap</field>
+<field name="date_from" eval="datetime(2024, 12, 27).date()"/>
+<field name="value">{'monthly': 30000.0, 'pct_of_pensionable': 0.30}</field>
+</record>
+<record id="ke_mortgage_cap_2024" model="ke.hr.rule.parameter">
+<field name="name">KE mortgage cap</field><field name="code">ke_mortgage_cap</field>
+<field name="date_from" eval="datetime(2024, 12, 27).date()"/><field name="value">30000.0</field>
+</record>
+<record id="ke_post_med_cap_2024" model="ke.hr.rule.parameter">
+<field name="name">KE post-retirement medical cap</field><field name="code">ke_post_med_cap</field>
+<field name="date_from" eval="datetime(2024, 12, 27).date()"/><field name="value">15000.0</field>
+</record>
+<record id="ke_insurance_2007" model="ke.hr.rule.parameter">
+<field name="name">KE insurance relief</field><field name="code">ke_insurance</field>
+<field name="date_from" eval="datetime(2007, 1, 1).date()"/>
+<field name="value">{'rate': 0.15, 'monthly_max': 5000.0}</field>
+</record>
+<record id="ke_disability_2010" model="ke.hr.rule.parameter">
+<field name="name">KE disability exemption</field><field name="code">ke_disability</field>
+<field name="date_from" eval="datetime(2010, 3, 10).date()"/><field name="value">150000.0</field>
+</record>
+<record id="ke_fringe_2026q4" model="ke.hr.rule.parameter">
+<field name="name">KE fringe market rate Q4-2026</field><field name="code">ke_fringe_rate</field>
+<field name="date_from" eval="datetime(2026, 10, 1).date()"/><field name="value">0.09</field>
+</record>
+</data>
 </odoo>
