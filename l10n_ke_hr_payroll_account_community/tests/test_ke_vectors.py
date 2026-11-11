@@ -35,14 +35,18 @@ Vector JSON schema (all amounts KES, magnitudes, not signs)::
      "pension": N, "mortgage": 0, "post_med": 0,
      "insurance": {"life": N, "health": 0, "edu": 0},
      "disabled": false, "cert": null, "secondary": false,
+     "nonresident": false,
      "expected": {"nssf": N, "shif": N, "ahl": N,
                   "taxable": N, "paye": N, "net": N},
      "note": "..."}
 
 ENGINE treatment notes: life/health/edu premiums give a 15% tax
 relief credit (capped 5000/month), they are NOT pre-tax deductions;
-personal relief is 2400 and applies unless the contract is secondary.
-Each expected value must match within 0.05.
+personal relief is 2400 and applies unless the contract is secondary
+or nonresident; nonresidents get no pension/mortgage/post-med
+deduction (added back for PAYE) and no reliefs; reported "taxable"
+is the resident-basis TAXABLE even for nonresidents. Each expected
+value must match within 0.05.
 """
 import datetime
 import glob
@@ -99,13 +103,20 @@ def compute(vector):
     nssf = -min(max(min(gross, uel), 0.0) * rate, rate * uel)
     shif = -max(gross * SHIF_RATE, SHIF_MIN)
     ahl = -(gross * AHL_RATE)
-    taxable = (gross + shif + ahl
-               - min(pension - nssf, PENSION_CAP)
+    # Pension deduction = min(voluntary + NSSF, monthly cap, 30% of
+    # pensionable); v1 pensionable == gross (no allowance rules yet).
+    pension_ded = min(pension - nssf, PENSION_CAP, 0.3 * gross)
+    taxable = (gross + shif + ahl - pension_ded
                - min(mortgage, MORTGAGE_CAP)
                - min(post_med, POST_MED_CAP))
     pay_taxable = taxable
     if disabled and cert:
         pay_taxable = max(taxable - DISABILITY_EXEMPTION, 0.0)
+    nonresident = bool(vector.get('nonresident'))
+    if nonresident:
+        pay_taxable = (pay_taxable + pension_ded
+                       + min(mortgage, MORTGAGE_CAP)
+                       + min(post_med, POST_MED_CAP))
     tax = 0.0
     base = 0.0
     for width, band_rate in PAYE_BANDS:
@@ -117,7 +128,7 @@ def compute(vector):
             break
     relief = 0.0
     ins_relief = 0.0
-    if not secondary:
+    if not secondary and not nonresident:
         relief = PERSONAL_RELIEF
         ins_relief = min(INSURANCE_RATE * (life + health + edu),
                          INSURANCE_MAX)

@@ -127,6 +127,17 @@ class TestKeRules(TransactionCase):
         totals = self._totals(self._make_slip(200000))
         self.assertEqual(totals['KE_NSSF'], -6480.0)
 
+    def test_pre2026_slip_feb2025(self):
+        """Feb-2025 100k slip (test_data payslip2): pre-2026 fringe gap
+        must not break compute; NSSF Year-3 (UEL 72000) applies."""
+        totals = self._totals(self._make_slip(
+            100000, date_from='2025-02-01', date_to='2025-02-28'))
+        self.assertEqual(totals['KE_NSSF'], -4320.0)
+        self.assertEqual(totals['KE_SHIF'], -2750.0)
+        self.assertEqual(totals['KE_AHL'], -1500.0)
+        self.assertAlmostEqual(totals['KE_PAYE'], -19812.36, delta=0.05)
+        self.assertAlmostEqual(totals['KE_NET'], 71617.64, delta=0.05)
+
     def test_shif_floor_5k(self):
         totals = self._totals(self._make_slip(5000))
         self.assertEqual(totals['KE_SHIF'], -300.0)

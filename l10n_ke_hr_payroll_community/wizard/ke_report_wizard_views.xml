@@ -74,4 +74,20 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
+    <!-- Kenya statutory reports under Payroll → Reports. -->
+    <menuitem id="menu_ke_nssf_wizard" name="NSSF Report"
+            parent="hr_payroll_community.menu_hr_payslip_reports"
+            action="action_ke_nssf_wizard"
+            groups="hr_payroll_community.group_hr_payroll_community_user"
+            sequence="20"/>
+    <menuitem id="menu_ke_shif_wizard" name="SHIF Report"
+            parent="hr_payroll_community.menu_hr_payslip_reports"
+            action="action_ke_shif_wizard"
+            groups="hr_payroll_community.group_hr_payroll_community_user"
+            sequence="21"/>
+    <menuitem id="menu_ke_p9_wizard" name="P9 Tax Deduction Card"
+            parent="hr_payroll_community.menu_hr_payslip_reports"
+            action="action_ke_p9_wizard"
+            groups="hr_payroll_community.group_hr_payroll_community_user"
+            sequence="22"/>
 </odoo>

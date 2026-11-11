@@ -21,7 +21,9 @@ from odoo import fields, models
 class HrVersion(models.Model):
     _inherit = 'hr.version'
 
-    ke_pension = fields.Monetary(string='Pension / month')
+    ke_pension = fields.Monetary(
+        string='Pension / month',
+        help='Voluntary pension excluding NSSF — NSSF is added automatically inside the 30k joint cap')
     ke_mortgage = fields.Monetary(string='Mortgage interest / month')
     ke_post_med = fields.Monetary(string='Post-retirement medical / month')
     ke_insurance_life = fields.Monetary(string='Life premium / month')
