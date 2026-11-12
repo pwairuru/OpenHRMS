@@ -18,14 +18,14 @@
 from odoo import models
 
 # (rule xmlid, leg field, l10n_ke_hr_payroll_account_community account code).
-# Mirrors data/ke_account_mapping_data.xml. Deduction rules carry both legs
-# (debit 630000 Salary Expenses, credit per-authority payable) so Done
-# slips post balanced, correctly-sided moves; the upstream adjustment entry
-# absorbs the gross-up difference on the journal default account. The XML
-# alone cannot resolve the legs reliably: company accounts are generated
-# after the module graph loads, and noupdate salary-rule records are skipped
-# by later upgrades. This hook re-applies the mapping at every registry
-# setup instead: it only fills legs that are still empty, so user
+# Mirrors data/ke_account_mapping_data.xml. Deduction rules keep both legs
+# configured, but models/hr_payslip.py posts each KE rule single-sided
+# (positive amounts debit the debit leg, negative amounts credit the
+# credit leg): Dr 630000 gross, Cr per-authority payable, Cr 230000 net.
+# The XML alone cannot resolve the legs reliably: company accounts are
+# generated after the module graph loads, and noupdate salary-rule records
+# are skipped by later upgrades. This hook re-applies the mapping at every
+# registry setup instead: it only fills legs that are still empty, so user
 # customizations are kept and the hook is a no-op once everything
 # resolved.
 KE_RULE_ACCOUNT_MAPPING = [

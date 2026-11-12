@@ -153,17 +153,33 @@ class TestKeRules(TransactionCase):
         self.assertEqual(totals['KE_SHIF'], -300.0)
 
     def test_move_sides_100k(self):
-        """Posted move: expense legs debit, per-authority payables credit."""
+        """Posted move: textbook single-sided shape.
+
+        Dr 630000 100000 == Cr payables 29558.35 + Cr 230000 70441.65.
+        No Adjustment Entry, no partner-less leftovers: the inherited
+        paired posting used to double-book deductions (Dr expense +
+        Cr payable per rule) and balance the books with a partner-less
+        credit to the journal default account.
+        """
         slip = self._make_slip(100000)
+        move = slip.move_id
+        self.assertFalse(
+            move.line_ids.filtered(lambda ml: ml.name == 'Adjustment Entry'))
+        self.assertFalse(
+            move.line_ids.filtered(
+                lambda ml: not ml.partner_id
+                and ml.account_id.account_type == 'liability_payable'
+                and ml.account_id.code != '230000'))
         by_code = {}
-        for ml in slip.move_id.line_ids:
+        for ml in move.line_ids:
             agg = by_code.setdefault(ml.account_id.code, [0.0, 0.0])
             agg[0] += ml.debit
             agg[1] += ml.credit
         self.assertAlmostEqual(
-            sum(slip.move_id.line_ids.mapped('debit')),
-            sum(slip.move_id.line_ids.mapped('credit')), places=2)
-        self.assertAlmostEqual(by_code['630000'][0], 129558.35, places=2)
+            sum(move.line_ids.mapped('debit')),
+            sum(move.line_ids.mapped('credit')), places=2)
+        self.assertAlmostEqual(by_code['630000'][0], 100000.0, places=2)
+        self.assertAlmostEqual(by_code['630000'][1], 0.0, places=2)
         self.assertAlmostEqual(by_code['230110'][1], 6000.0, places=2)
         self.assertAlmostEqual(by_code['230120'][1], 2750.0, places=2)
         self.assertAlmostEqual(by_code['230130'][1], 1500.0, places=2)
