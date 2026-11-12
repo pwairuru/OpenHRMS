@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- Statutory creditor partners, pre-wired to their payable accounts.
+
+     Payroll remittances are vendor payments: without a partner carrying
+     the right payable property account, Odoo posts to the chart default
+     and the authority's balance can never be paid down or reconciled.
+     supplier_rank=1 lists them under Vendors out of the box.
+     Registers are linked to these partners in
+     ke_register_partners_data.xml (fresh installs) and by the 20.0.1.0.3
+     migration (upgrades, adopting same-named existing partners so no
+     duplicates are left behind). -->
+<data noupdate="1">
+<record id="ke_partner_kra" model="res.partner">
+<field name="name">Kenya Revenue Authority</field>
+<field name="is_company" eval="True"/>
+<field name="supplier_rank" eval="1"/>
+<field name="property_account_payable_id" ref="ke_account_paye_payable"/>
+</record>
+<record id="ke_partner_nssf" model="res.partner">
+<field name="name">NSSF</field>
+<field name="is_company" eval="True"/>
+<field name="supplier_rank" eval="1"/>
+<field name="property_account_payable_id" ref="ke_account_nssf_payable"/>
+</record>
+<record id="ke_partner_sha" model="res.partner">
+<field name="name">Social Health Authority</field>
+<field name="is_company" eval="True"/>
+<field name="supplier_rank" eval="1"/>
+<field name="property_account_payable_id" ref="ke_account_shif_payable"/>
+</record>
+<record id="ke_partner_ahl" model="res.partner">
+<field name="name">Affordable Housing Board</field>
+<field name="is_company" eval="True"/>
+<field name="supplier_rank" eval="1"/>
+<field name="property_account_payable_id" ref="ke_account_ahl_payable"/>
+</record>
+</data>
+</odoo>

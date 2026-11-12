@@ -28,10 +28,11 @@ class TestKeRules(TransactionCase):
     PAYE -19308.35 / NET 70441.65.
     """
 
-    # (rule xmlid, leg field, expected l10n_ke account code), shared with
+    # (rule xmlid, leg field, expected account code), shared with
     # models/hr_salary_rule.py. Deduction rules carry both legs (debit
-    # 630000 Salary Expenses, credit 230100 Employee Payroll Taxes); levies
-    # share 230100 because the core l10n_ke chart has no per-levy payables.
+    # 630000 Salary Expenses, credit per-authority payable); per-authority
+    # payable accounts (230110-230150, liability_payable) exist so generic
+    # partner statements can show each authority's balance.
 
     def _ke_company(self):
         return self.env.ref('base.main_company')
@@ -152,7 +153,7 @@ class TestKeRules(TransactionCase):
         self.assertEqual(totals['KE_SHIF'], -300.0)
 
     def test_move_sides_100k(self):
-        """Posted move: expense legs debit, levy legs credit 230100."""
+        """Posted move: expense legs debit, per-authority payables credit."""
         slip = self._make_slip(100000)
         by_code = {}
         for ml in slip.move_id.line_ids:
@@ -163,8 +164,27 @@ class TestKeRules(TransactionCase):
             sum(slip.move_id.line_ids.mapped('debit')),
             sum(slip.move_id.line_ids.mapped('credit')), places=2)
         self.assertAlmostEqual(by_code['630000'][0], 129558.35, places=2)
-        self.assertAlmostEqual(by_code['230100'][1], 29558.35, places=2)
+        self.assertAlmostEqual(by_code['230110'][1], 6000.0, places=2)
+        self.assertAlmostEqual(by_code['230120'][1], 2750.0, places=2)
+        self.assertAlmostEqual(by_code['230130'][1], 1500.0, places=2)
+        self.assertAlmostEqual(by_code['230140'][1], 19308.35, places=2)
         self.assertAlmostEqual(by_code['230000'][1], 70441.65, places=2)
+
+    def test_statutory_credits_are_payable_type(self):
+        """Statutory credits must sit on liability_payable accounts, or no
+        generic partner statement (aged balance, vendor statement, partner
+        ledger) can ever show the authority's balance. Net pay is excluded:
+        its lines carry no partner, so no partner statement consumes them."""
+        for xmlid, leg, _code in KE_RULE_ACCOUNT_MAPPING:
+            if leg != 'account_credit_id':
+                continue
+            if xmlid.endswith('ke_rule_net'):
+                continue
+            with self.subTest(rule=xmlid):
+                account = self._ke_rule(xmlid)[leg]
+                self.assertTrue(account, 'no account on %s' % xmlid)
+                self.assertEqual(account.account_type, 'liability_payable')
+                self.assertTrue(account.reconcile)
 
     def test_mapping_accounts(self):
         company = self._ke_company()

@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Kenya - Payroll Accounting (Community)',
-    'version': '20.0.1.0.1',
+    'version': '20.0.1.0.3',
     'category': 'Human Resources/Payroll',
     'summary': 'Kenya statutory salary rules mapped to ledger accounts',
     'description': 'Maps the Kenya payroll salary rules (PAYE, NSSF, SHIF, '
@@ -35,6 +35,9 @@
         'l10n_ke',
     ],
     'data': [
+        'data/ke_payable_accounts_data.xml',
+        'data/ke_authority_partners_data.xml',
+        'data/ke_register_partners_data.xml',
         'data/ke_account_mapping_data.xml',
     ],
     'license': 'LGPL-3',

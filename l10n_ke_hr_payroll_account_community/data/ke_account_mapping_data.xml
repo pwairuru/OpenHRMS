@@ -1,54 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!-- Kenya payroll rules -> ledger accounts.
-     l10n_ke ships its chart as templates, so generated company accounts get
-     per-company XML ids (account.<company_id>_<code>) that cannot be ref'd
-     statically. Each leg below is therefore resolved with a field-level
-     search on (code, company). If the KE chart is not installed yet the
-     search matches nothing and the leg stays empty (no install error);
-     installing/upgrading this module after the chart resolves the legs
-     (this file is NOT noupdate, so upgrades re-apply the searches).
+<!-- Kenya payroll rules -> ledger accounts. Fresh installs only: the KE
+     salary rules were created under <data noupdate="1">, so the loader
+     skips data-file writes to them on upgrade. Upgrades converge via
+     migrations/20.0.1.0.2/post-migration.py (same mapping); the model
+     _register_hook fills any leg still empty at registry setup.
+     Credits go to per-authority liability_payable accounts (not the shared
+     230100): generic partner statements and the Payable tile only read
+     receivable/payable-type accounts, and each authority's remittance must
+     reconcile against its own balance. Posted history on 230100 stays as
+     is; only new slips use the accounts below.
      Balance for a plain 100k slip: debit 630000 100000 =
-     credits 230100 29558.35 (6000 + 2750 + 1500 + 19308.35) +
-     230000 70441.65.
-     Deduction rules carry both legs (debit 630000 Salary Expenses, credit
-     230100 Employee Payroll Taxes) so Done slips post correctly-sided
-     moves; the upstream adjustment entry absorbs the gross-up difference
-     on the journal default account.
-     NOTE: the core l10n_ke chart has no per-levy payable accounts, so all
-     employee-side statutory credits (NSSF/SHIF/AHL/PAYE/HELB) post to
-     230100 Employee Payroll Taxes and NET posts to 230000 Salary Payable.
-     Revisit if the chart gains dedicated levy accounts. -->
+     credits 230110 6000 + 230120 2750 + 230130 1500 +
+     230140 19308.35 + 230000 70441.65 (+230100 adjustment 29558.35). -->
 <data>
 <record id="l10n_ke_hr_payroll_community.ke_rule_basic" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_nssf_t1" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
-<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230110'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_nssf_t2" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
-<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230110'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_shif" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
-<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230120'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_ahl" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
-<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230130'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_paye" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
-<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230140'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_net" model="hr.salary.rule">
 <field name="account_credit_id" search="[('code', '=', '230000'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <record id="l10n_ke_hr_payroll_community.ke_rule_helb" model="hr.salary.rule">
 <field name="account_debit_id" search="[('code', '=', '630000'), ('company_ids', '=', ref('base.main_company'))]"/>
-<field name="account_credit_id" search="[('code', '=', '230100'), ('company_ids', '=', ref('base.main_company'))]"/>
+<field name="account_credit_id" search="[('code', '=', '230150'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <!-- ke_rule_gross / ke_rule_taxable / ke_rule_fringe_info stay account-less:
      subtotal / informational lines must not post. -->

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- Per-authority statutory payable accounts (owned by this module).
+
+     The core l10n_ke chart carries payroll taxes on 230100/230000 typed
+     liability_current, which generic Odoo partner statements (aged
+     balance, vendor/customer statements, partner ledger) all filter out:
+     they only read asset_receivable / liability_payable. Money owed to
+     KRA/NSSF/SHA/AHL/HELB must therefore sit on liability_payable
+     accounts, or no partner statement can ever show the authority's
+     balance. One account per authority (not one shared pot) so each
+     remittance reconciles against its own creditor and ages separately.
+     Posted history on 230100 stays untouched; only new slips use these.
+     Codes 230110-230150 are free in the l10n_ke chart (verified). -->
+<data noupdate="1">
+<record id="ke_account_nssf_payable" model="account.account">
+<field name="name">NSSF Payable</field><field name="code">230110</field>
+<field name="account_type">liability_payable</field><field name="reconcile" eval="True"/>
+<field name="company_ids" eval="[(6, 0, [ref('base.main_company')])]"/>
+</record>
+<record id="ke_account_shif_payable" model="account.account">
+<field name="name">SHIF Payable</field><field name="code">230120</field>
+<field name="account_type">liability_payable</field><field name="reconcile" eval="True"/>
+<field name="company_ids" eval="[(6, 0, [ref('base.main_company')])]"/>
+</record>
+<record id="ke_account_ahl_payable" model="account.account">
+<field name="name">Housing Levy Payable</field><field name="code">230130</field>
+<field name="account_type">liability_payable</field><field name="reconcile" eval="True"/>
+<field name="company_ids" eval="[(6, 0, [ref('base.main_company')])]"/>
+</record>
+<record id="ke_account_paye_payable" model="account.account">
+<field name="name">PAYE Payable</field><field name="code">230140</field>
+<field name="account_type">liability_payable</field><field name="reconcile" eval="True"/>
+<field name="company_ids" eval="[(6, 0, [ref('base.main_company')])]"/>
+</record>
+<record id="ke_account_helb_payable" model="account.account">
+<field name="name">HELB Payable</field><field name="code">230150</field>
+<field name="account_type">liability_payable</field><field name="reconcile" eval="True"/>
+<field name="company_ids" eval="[(6, 0, [ref('base.main_company')])]"/>
+</record>
+</data>
+</odoo>
