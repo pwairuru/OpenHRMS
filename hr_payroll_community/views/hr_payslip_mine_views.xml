@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payslip_action_mine" model="ir.actions.act_window">
+        <field name="name">My Payslips</field>
+        <field name="res_model">hr.payslip</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="hr_payslip_search"/>
+        <field name="domain">[('employee_id.user_id', '=', uid), ('state', 'in', ['done', 'paid'])]</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem id="menu_hr_payslip_mine" name="My Payslips"
+              parent="menu_hr_payroll_community_root"
+              action="hr_payslip_action_mine"
+              groups="base.group_user" sequence="1"/>
+</odoo>

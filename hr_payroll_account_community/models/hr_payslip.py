@@ -49,7 +49,7 @@ class HrPayslip(models.Model):
         """Compute the total number of payments linked to this payslip."""
         for slip in self:
             if slip.number:
-                slip.payment_count = self.env['account.payment'].search_count([('memo', '=', slip.number)])
+                slip.payment_count = self.env['account.payment'].sudo().search_count([('memo', '=', slip.number)])
             else:
                 slip.payment_count = 0
 
@@ -57,7 +57,8 @@ class HrPayslip(models.Model):
     def _compute_paid(self):
         """Compute whether the payslip's associated journal entry is marked as paid."""
         for slip in self:
-            slip.paid = slip.move_id and slip.move_id.payment_state in ('paid', 'in_payment', 'reversed') or False
+            move = slip.move_id.sudo()
+            slip.paid = move and move.payment_state in ('paid', 'in_payment', 'reversed') or False
 
     def action_open_journal_entry(self):
         """Open the corresponding accounting journal entry (move) for this payslip."""

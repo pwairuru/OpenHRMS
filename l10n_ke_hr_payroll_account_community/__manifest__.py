@@ -37,7 +37,6 @@
     'data': [
         'data/ke_payable_accounts_data.xml',
         'data/ke_authority_partners_data.xml',
-        'data/ke_register_partners_data.xml',
         'data/ke_account_mapping_data.xml',
     ],
     'license': 'LGPL-3',

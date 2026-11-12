@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_payslips" name="My Payslips link"
+              inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Payslips</t>
+                <t t-set="url" t-value="'/my/payslips'"/>
+                <t t-set="placeholder_count" t-value="'payslip_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_payslips" name="My Payslips">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"/>
+            <t t-set="title">Payslips</t>
+            <div class="o_portal_my_payslips">
+                <t t-if="not payslips">
+                    <p>No payslips found.</p>
+                </t>
+                <t t-else="">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>Reference</th><th>Period</th><th>Net</th><th>Status</th><th/></tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="payslips" t-as="s">
+                                <td><t t-esc="s.number or s.name"/></td>
+                                <td><t t-esc="s.date_from"/> – <t t-esc="s.date_to"/></td>
+                                <td><t t-esc="s.net_wage"/></td>
+                                <td><t t-esc="s.state"/></td>
+                                <td>
+                                    <a t-attf-href="/my/payslip/#{s.id}">View</a>
+                                    |
+                                    <a t-attf-href="/my/payslip/#{s.id}/pdf">PDF</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_payslip_detail" name="Payslip Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="title">Payslip</t>
+            <div>
+                <h2><t t-esc="payslip.number or payslip.name"/></h2>
+                <p>Period: <t t-esc="payslip.date_from"/> – <t t-esc="payslip.date_to"/></p>
+                <p>Net: <t t-esc="payslip.net_wage"/></p>
+                <p>Status: <t t-esc="payslip.state"/></p>
+                <a class="btn btn-primary" t-attf-href="/my/payslip/#{payslip.id}/pdf">Download PDF</a>
+                <a class="btn btn-secondary" href="/my/payslips">Back</a>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -28,3 +28,11 @@ access_hr_payslip_run_generate,access.hr.payslip.run.generate,hr.payslip.run.gen
 access_payslip_lines_contribution_register_community_user,access.payslip.lines.contribution.register.community.user,payslip.lines.contribution.register,hr_payroll_community.group_hr_payroll_community_user,crud,
 access_hr_payslip_monthly_report_manager,hr.payslip.report,hr.payslip.report,hr_payroll_community.group_hr_payroll_community_user,crud,
 access_group_user,Access User,payslip.confirm,hr_payroll_community.group_hr_payroll_community_user,crud,
+access_hr_payslip_employee,Employee: own payslips read,hr.payslip,base.group_user,r,"[('employee_id.user_id', '=', user.id), ('state', 'in', ['done', 'paid'])]"
+access_hr_payslip_line_employee,Employee: own payslip lines read,hr.payslip.line,base.group_user,r,"[('slip_id.employee_id.user_id', '=', user.id), ('slip_id.state', 'in', ['done', 'paid'])]"
+access_hr_payslip_input_employee,Employee: own payslip inputs read,hr.payslip.input,base.group_user,r,"[('payslip_id.employee_id.user_id', '=', user.id), ('payslip_id.state', 'in', ['done', 'paid'])]"
+access_hr_payslip_worked_days_employee,Employee: own worked days read,hr.payslip.worked.days,base.group_user,r,"[('payslip_id.employee_id.user_id', '=', user.id), ('payslip_id.state', 'in', ['done', 'paid'])]"
+access_hr_salary_rule_category_employee,Employee: salary rule categories read,hr.salary.rule.category,base.group_user,r,
+access_hr_salary_rule_employee,Employee: salary rules read,hr.salary.rule,base.group_user,r,
+access_hr_payroll_structure_employee,Employee: payroll structures read,hr.payroll.structure,base.group_user,r,
+access_hr_version_employee,Employee: own contract read,hr.version,base.group_user,r,"[('employee_id.user_id', '=', user.id)]"

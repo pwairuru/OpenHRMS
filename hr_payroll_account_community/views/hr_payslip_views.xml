@@ -13,7 +13,8 @@
                         class="oe_stat_button"
                         icon="menu"
                         type="object"
-                        invisible="not move_id">
+                        invisible="not move_id"
+                        groups="hr_payroll_community.group_hr_payroll_community_user,account.group_account_invoice,account.group_account_manager">
                     <div class="o_stat_info">
                         <span class="o_stat_text">Journal Entry</span>
                     </div>
@@ -22,7 +23,8 @@
                         class="oe_stat_button"
                         icon="attach_money"
                         type="object"
-                        invisible="payment_count == 0">
+                        invisible="payment_count == 0"
+                        groups="hr_payroll_community.group_hr_payroll_community_user,account.group_account_invoice,account.group_account_manager">
                     <div class="o_stat_info">
                         <field name="payment_count" widget="statinfo" string="Payments"/>
                     </div>
@@ -31,15 +33,18 @@
             <xpath expr="//button[@name='action_mark_as_paid']" position="before">
                 <button string="Pay" name="action_open_payment_wizard"
                         type="object" class="oe_highlight"
-                        invisible="not move_id or payment_count &gt; 0"/>
+                        invisible="not move_id or payment_count &gt; 0"
+                        groups="hr_payroll_community.group_hr_payroll_community_user,account.group_account_invoice,account.group_account_manager"/>
             </xpath>
             <xpath expr="//button[@name='action_mark_as_paid']" position="attributes">
                 <attribute name="invisible">state != 'done' or payment_count == 0</attribute>
             </xpath>
             <field name="paid" position="after">
                 <field name="date" readonly="state != 'draft'"/>
-                <field name="journal_id" required="1" readonly="state != 'draft'"/>
-                <field name="move_id" readonly="1"/>
+                <field name="journal_id" required="1" readonly="state != 'draft'"
+                       groups="hr_payroll_community.group_hr_payroll_community_user,account.group_account_invoice,account.group_account_manager"/>
+                <field name="move_id" readonly="1"
+                       groups="hr_payroll_community.group_hr_payroll_community_user,account.group_account_invoice,account.group_account_manager"/>
             </field>
         </field>
     </record>

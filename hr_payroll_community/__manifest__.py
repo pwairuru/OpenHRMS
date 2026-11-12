@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Odoo 20 HR Payroll',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.0.1',
     'category': 'Human Resources',
     'summary': """Odoo 20 HR Payroll, Odoo20 Payroll, Payroll, Odoo Payroll,
     Payroll V20, Odoo20, Payroll Management, Odoo20 Payslip""",
@@ -34,7 +34,8 @@
     'website': 'https://www.openhrms.com',
     'depends': [
         'hr_holidays',
-        'hr_work_entry'
+        'hr_work_entry',
+        'portal'
     ],
     'data': [
         'data/ir_module_category_data.xml',
@@ -55,6 +56,8 @@
         'views/hr_contribution_register_views.xml',
         'views/hr_payroll_structure_views.xml',
         'views/hr_payslip_views.xml',
+        'views/hr_payslip_mine_views.xml',
+        'views/portal_templates.xml',
         'views/hr_payslip_line_views.xml',
         'views/hr_employee_views.xml',
         'views/hr_payslip_run_views.xml',
