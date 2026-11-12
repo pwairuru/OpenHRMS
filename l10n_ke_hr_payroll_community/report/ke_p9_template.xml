@@ -21,13 +21,13 @@
                             </thead>
                             <tbody>
                                 <tr t-foreach="rows" t-as="r">
-                                    <td><t t-esc="r['employee']"/></td>
-                                    <td><t t-esc="r['kra_pin']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['gross']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['nssf']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['shif']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['ahl']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['paye']"/></td>
+                                    <td><span t-out="r['employee']"/></td>
+                                    <td><span t-out="r['kra_pin']"/></td>
+                                    <td class="text-end"><span t-out="'%.2f' % r['gross']"/></td>
+                                    <td class="text-end"><span t-out="'%.2f' % r['nssf']"/></td>
+                                    <td class="text-end"><span t-out="'%.2f' % r['shif']"/></td>
+                                    <td class="text-end"><span t-out="'%.2f' % r['ahl']"/></td>
+                                    <td class="text-end"><span t-out="'%.2f' % r['paye']"/></td>
                                 </tr>
                             </tbody>
                         </table>

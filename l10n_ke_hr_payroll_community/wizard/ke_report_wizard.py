@@ -16,7 +16,6 @@
 #
 #############################################################################
 """Kenya statutory report wizards: NSSF/SHIF monthly XLSX, P9 yearly PDF."""
-import base64
 import io
 
 from odoo import fields, models
@@ -53,7 +52,14 @@ def _line_total(slip, code):
     return abs(sum(slip.line_ids.filtered(lambda l: l.code == code).mapped('total')))
 
 
-def _xlsx_download(rows, header, filename):
+def _xlsx_download(wizard, rows, header, filename):
+    """XLSX download via a stored attachment.
+
+    A ``data:`` URL previously carried the whole workbook in the action
+    URL, which browsers block (CSP/popup/size limits) so the Export
+    button appeared to do nothing. Store the file and return a real
+    ``/web/content`` download URL instead.
+    """
     import openpyxl
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -63,11 +69,17 @@ def _xlsx_download(rows, header, filename):
         ws.append(row)
     buf = io.BytesIO()
     wb.save(buf)
-    data = base64.b64encode(buf.getvalue()).decode()
+    attachment = wizard.env['ir.attachment'].create({
+        'name': '%s.xlsx' % filename,
+        'type': 'binary',
+        'raw': buf.getvalue(),
+        'mimetype': 'application/vnd.openxmlformats-officedocument.'
+                    'spreadsheetml.sheet',
+    })
     return {
         'type': 'ir.actions.act_url',
-        'url': 'data:application/vnd.openxmlformats-officedocument.'
-               'spreadsheetml.sheet;base64,' + data,
+        'url': '/web/content/ir.attachment/%s/raw/%s?download=true'
+               % (attachment.id, attachment.name),
         'target': 'self',
     }
 
@@ -102,6 +114,7 @@ class KeNssfWizard(models.TransientModel):
         if not rows:
             raise UserError('No Done payslips for period')
         return _xlsx_download(
+            self,
             rows,
             ['Name', 'ID No', 'NSSF No', 'Tier I', 'Tier II', 'Total'],
             'NSSF')
@@ -133,7 +146,8 @@ class KeShifWizard(models.TransientModel):
             ])
         if not rows:
             raise UserError('No Done payslips for period')
-        return _xlsx_download(rows, ['Name', 'ID No', 'SHIF No', 'Amount'], 'SHIF')
+        return _xlsx_download(
+            self, rows, ['Name', 'ID No', 'SHIF No', 'Amount'], 'SHIF')
 
 
 class KeP9Wizard(models.TransientModel):

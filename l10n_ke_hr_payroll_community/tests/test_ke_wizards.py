@@ -90,10 +90,13 @@ class TestKeWizards(TransactionCase):
     def test_period_slips_includes_paid(self):
         done = self._slip(100000, '2026-11-01', '2026-11-30', 'done')
         paid = self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
-        self._slip(100000, '2026-11-01', '2026-11-30', 'draft')
-        self._slip(100000, '2026-10-01', '2026-10-31', 'paid')
+        draft = self._slip(100000, '2026-11-01', '2026-11-30', 'draft')
+        oct_paid = self._slip(100000, '2026-10-01', '2026-10-31', 'paid')
         got = {s.id for s in _period_slips(self._nssf_wizard(11, 2026))}
-        self.assertEqual({done.id, paid.id}, got)
+        # Superset: the DB may already hold real slips for the period.
+        self.assertLessEqual({done.id, paid.id}, got)
+        self.assertNotIn(draft.id, got)
+        self.assertNotIn(oct_paid.id, got)
 
     def test_nssf_total_falls_back_to_legacy_line(self):
         slip = self._slip(100000, '2026-03-01', '2026-03-31', 'done')
@@ -118,3 +121,25 @@ class TestKeWizards(TransactionCase):
         self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
         result = self._nssf_wizard(11, 2026).action_export()
         self.assertEqual(result.get('type'), 'ir.actions.act_url')
+        # Real download URL, not a blocked data: URI.
+        self.assertIn('/web/content/ir.attachment/', result.get('url'))
+
+    def test_shif_export_runs_on_paid_period(self):
+        self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
+        result = self.env['ke.shif.wizard'].create(
+            {'month': '11', 'year': 2026}).action_export()
+        self.assertEqual(result.get('type'), 'ir.actions.act_url')
+        self.assertIn('/web/content/ir.attachment/', result.get('url'))
+
+    def test_payslip_report_select_maps_ke_codes(self):
+        select = self.env['hr.payslip.report']._select()
+        self.assertIn('KE_BASIC', select)
+        self.assertIn('KE_GROSS', select)
+        self.assertIn('KE_NET', select)
+
+    def test_p9_template_renders_cells(self):
+        self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
+        wiz = self.env['ke.p9.wizard'].create({'year': 2026})
+        html = self.env['ir.qweb']._render(
+            'l10n_ke_hr_payroll_community.ke_p9_template', {'docs': wiz})
+        self.assertIn('100000.00', html)
