@@ -8,12 +8,12 @@
                     <div class="page" style="font-size: 11px;">
                         <h4>Kenya Revenue Authority — Tax Deduction Card (P9)</h4>
                         <p>
-                            Employer: <t t-esc="card['employer']"/>
-                            <t t-if="card['employer_pin']"> (PIN: <t t-esc="card['employer_pin']"/>)</t>
-                            | Employee: <t t-esc="card['employee']"/>
-                            | KRA PIN: <t t-esc="card['kra_pin'] or ''"/>
-                            | ID: <t t-esc="card['id_no'] or ''"/>
-                            | Year: <t t-esc="card['year']"/>
+                            Employer: <t t-out="card['employer']"/>
+                            <t t-if="card['employer_pin']"> (PIN: <t t-out="card['employer_pin']"/>)</t>
+                            | Employee: <t t-out="card['employee']"/>
+                            | KRA PIN: <t t-out="card['kra_pin'] or ''"/>
+                            | ID: <t t-out="card['id_no'] or ''"/>
+                            | Year: <t t-out="card['year']"/>
                         </p>
                         <table class="table table-sm table-bordered">
                             <thead>
@@ -36,36 +36,36 @@
                             </thead>
                             <tbody>
                                 <tr t-foreach="card['months']" t-as="r">
-                                    <td><t t-esc="r['month']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['basic']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['gross']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['pension']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['shif']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['ahl']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['prmf']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['mortgage']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['deduct']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['charge']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['tax']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['pers']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['ins']"/></td>
-                                    <td class="text-end"><t t-esc="'%.2f' % r['paye']"/></td>
+                                    <td><t t-out="r['month']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['basic']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['gross']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['pension']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['shif']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['ahl']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['prmf']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['mortgage']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['deduct']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['charge']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['tax']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['pers']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['ins']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['paye']"/></td>
                                 </tr>
                                 <tr t-foreach="[card['total']]" t-as="t">
-                                    <td><strong><t t-esc="t['month']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['basic']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['gross']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['pension']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['shif']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['ahl']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['prmf']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['mortgage']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['deduct']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['charge']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['tax']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['pers']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['ins']"/></strong></td>
-                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['paye']"/></strong></td>
+                                    <td><strong><t t-out="t['month']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['basic']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['gross']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['pension']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['shif']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['ahl']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['prmf']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['mortgage']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['deduct']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['charge']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['tax']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['pers']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['ins']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % t['paye']"/></strong></td>
                                 </tr>
                             </tbody>
                         </table>

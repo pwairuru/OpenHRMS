@@ -12,7 +12,7 @@
               inherit_id="hr_payroll_community.portal_my_payslip_detail"
               name="Payslip Detail P9 button">
         <xpath expr="//a[hasclass('btn-primary')]" position="after">
-            <a t-if="payslip.date_from" class="btn btn-secondary" t-attf-href="/my/p9/#{payslip.date_from.year}/pdf">Download P9 (<t t-esc="payslip.date_from.year"/>)</a>
+            <a t-if="payslip.date_from" class="btn btn-secondary" t-attf-href="/my/p9/#{payslip.date_from.year}/pdf">Download P9 (<t t-out="payslip.date_from.year"/>)</a>
         </xpath>
     </template>
 
@@ -27,7 +27,7 @@
                 <t t-else="">
                     <ul>
                         <li t-foreach="years" t-as="y">
-                            <a t-attf-href="/my/p9/#{y}/pdf">Download P9 for <t t-esc="y"/> (PDF)</a>
+                            <a t-attf-href="/my/p9/#{y}/pdf">Download P9 for <t t-out="y"/> (PDF)</a>
                         </li>
                     </ul>
                 </t>

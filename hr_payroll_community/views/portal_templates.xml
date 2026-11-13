@@ -27,10 +27,10 @@
                         </thead>
                         <tbody>
                             <tr t-foreach="payslips" t-as="s">
-                                <td><t t-esc="s.number or s.name"/></td>
-                                <td><t t-esc="s.date_from"/> – <t t-esc="s.date_to"/></td>
-                                <td><t t-esc="s.net_wage"/></td>
-                                <td><t t-esc="s.state"/></td>
+                                <td><t t-out="s.number or s.name"/></td>
+                                <td><t t-out="s.date_from"/> – <t t-out="s.date_to"/></td>
+                                <td><t t-out="s.net_wage"/></td>
+                                <td><t t-out="s.state"/></td>
                                 <td>
                                     <a t-attf-href="/my/payslip/#{s.id}">View</a>
                                     |
@@ -48,10 +48,10 @@
         <t t-call="portal.portal_layout">
             <t t-set="title">Payslip</t>
             <div>
-                <h2><t t-esc="payslip.number or payslip.name"/></h2>
-                <p>Period: <t t-esc="payslip.date_from"/> – <t t-esc="payslip.date_to"/></p>
-                <p>Net: <t t-esc="payslip.net_wage"/></p>
-                <p>Status: <t t-esc="payslip.state"/></p>
+                <h2><t t-out="payslip.number or payslip.name"/></h2>
+                <p>Period: <t t-out="payslip.date_from"/> – <t t-out="payslip.date_to"/></p>
+                <p>Net: <t t-out="payslip.net_wage"/></p>
+                <p>Status: <t t-out="payslip.state"/></p>
                 <a class="btn btn-primary" t-attf-href="/my/payslip/#{payslip.id}/pdf">Download PDF</a>
                 <a class="btn btn-secondary" href="/my/payslips">Back</a>
             </div>
