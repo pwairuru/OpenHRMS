@@ -36,6 +36,15 @@ class HrPayslip(models.Model):
         """
         if not (line.code or '').startswith('KE_'):
             return super()._get_salary_rule_move_lines(line, amount)
+        if line.code == 'KE_PAYE':
+            # Parent holds the gross band tax; KE_RELIEF_PERS / KE_RELIEF_INS
+            # are account-less display lines in the same category. Post the
+            # category total (net tax payable) so the KRA liability is right.
+            amount = sum(
+                payslip_line.total
+                for payslip_line in line.slip_id.line_ids
+                if payslip_line.category_id.code == 'KE_PAYE'
+            )
         debit_id = line.salary_rule_id.account_debit_id.id
         credit_id = line.salary_rule_id.account_credit_id.id
         if amount > 0.0 and debit_id:

@@ -45,6 +45,9 @@
 <field name="account_credit_id" search="[('code', '=', '230150'), ('company_ids', '=', ref('base.main_company'))]"/>
 </record>
 <!-- ke_rule_gross / ke_rule_taxable / ke_rule_fringe_info stay account-less:
-     subtotal / informational lines must not post. -->
+     subtotal / informational lines must not post.
+     ke_rule_relief_pers / ke_rule_relief_ins are likewise account-less
+     display lines: the KE_PAYE parent posts the KE_PAYE category total
+     (net tax payable), so reliefs must not post again. -->
 </data>
 </odoo>

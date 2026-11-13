@@ -107,7 +107,6 @@ result = categories.GROSS + categories.KE_SHIF + categories.KE_AHL - pension_ded
 <field name="amount_select">code</field>
 <field name="amount_python_compute"><![CDATA[bands = payslip.ke_get_param('ke_paye_bands')
 disability = payslip.ke_get_param('ke_disability')
-ins = payslip.ke_get_param('ke_insurance')
 taxable = KE_TAXABLE
 # Disability exemption needs a valid certificate: first ke_disability of taxable pay is exempt.
 if contract.ke_disabled and contract.ke_disability_cert:
@@ -130,13 +129,49 @@ for width, rate in bands:
     base += w
     if taxable <= base:
         break
-relief = 0.0
-ins_relief = 0.0
-if not contract.ke_secondary and not nonresident:
-    relief = payslip.ke_get_param('ke_personal_relief')
-if not contract.ke_secondary and not nonresident:
-    ins_relief = min(ins['rate'] * (contract.ke_insurance_life + contract.ke_insurance_health + contract.ke_insurance_edu), ins['monthly_max'])
-result = -max(tax - relief - ins_relief, 0.0)]]></field>
+# Gross band tax. Personal + insurance reliefs are child rules
+# (KE_RELIEF_PERS / KE_RELIEF_INS) so each relief shows on the slip;
+# the KE_PAYE category total stays the net tax payable.
+result = -tax]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_relief_pers" model="hr.salary.rule">
+<field name="name">Personal Relief</field>
+<field name="sequence" eval="116"/>
+<field name="code">KE_RELIEF_PERS</field>
+<field name="category_id" ref="ke_cat_paye"/>
+<field name="parent_rule_id" ref="ke_rule_paye"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[# Personal relief credit, child of KE_PAYE. Applied relief can never
+# exceed the gross band tax of the parent rule.
+gross_tax = -KE_PAYE
+entitlement = 0.0
+if not contract.ke_secondary and not bool(contract.ke_nonresident):
+    entitlement = payslip.ke_get_param('ke_personal_relief')
+result = min(entitlement, max(gross_tax, 0.0))]]></field>
+<field name="appears_on_payslip" eval="True"/>
+<field name="company_id" ref="base.main_company"/>
+</record>
+<record id="ke_rule_relief_ins" model="hr.salary.rule">
+<field name="name">Insurance Relief</field>
+<field name="sequence" eval="117"/>
+<field name="code">KE_RELIEF_INS</field>
+<field name="category_id" ref="ke_cat_paye"/>
+<field name="parent_rule_id" ref="ke_rule_paye"/>
+<field name="condition_select">none</field>
+<field name="amount_select">code</field>
+<field name="amount_python_compute"><![CDATA[# Insurance relief credit (15% of life/health/edu premiums, capped),
+# child of KE_PAYE. Applies only to what the personal relief left:
+# applied relief can never exceed gross tax minus KE_RELIEF_PERS.
+gross_tax = -KE_PAYE
+pers_applied = KE_RELIEF_PERS
+entitlement = 0.0
+if not contract.ke_secondary and not bool(contract.ke_nonresident):
+    ins = payslip.ke_get_param('ke_insurance')
+    entitlement = min(ins['rate'] * (contract.ke_insurance_life + contract.ke_insurance_health + contract.ke_insurance_edu), ins['monthly_max'])
+result = min(entitlement, max(gross_tax - pers_applied, 0.0))]]></field>
 <field name="appears_on_payslip" eval="True"/>
 <field name="company_id" ref="base.main_company"/>
 </record>

@@ -37,8 +37,13 @@ Vector JSON schema (all amounts KES, magnitudes, not signs)::
      "disabled": false, "cert": null, "secondary": false,
      "nonresident": false,
      "expected": {"nssf": N, "t1": N, "t2": N, "shif": N, "ahl": N,
-                  "taxable": N, "paye": N, "net": N},
+                  "taxable": N, "paye": N, "relief_pers": N,
+                  "relief_ins": N, "net": N},
      "note": "..."}
+
+``paye`` is the NET payable (KE_PAYE category total); ``relief_pers`` /
+``relief_ins`` are the child-credit magnitudes, each capped at the
+remaining gross band tax (low earners show partial relief).
 
 ENGINE treatment notes: life/health/edu premiums give a 15% tax
 relief credit (capped 5000/month), they are NOT pre-tax deductions;
@@ -135,10 +140,16 @@ def compute(vector):
         relief = PERSONAL_RELIEF
         ins_relief = min(INSURANCE_RATE * (life + health + edu),
                          INSURANCE_MAX)
-    paye = -max(tax - relief - ins_relief, 0.0)
+    # Child-rule semantics: each relief is capped at what is left of the
+    # gross band tax (KE_PAYE is the gross tax; KE_RELIEF_PERS/_INS are
+    # positive credits in the same category; net PAYE is the total).
+    relief_pers = min(relief, max(tax, 0.0))
+    relief_ins = min(ins_relief, max(tax - relief_pers, 0.0))
+    paye = -max(tax - relief_pers - relief_ins, 0.0)
     net = gross + nssf + shif + ahl + paye
     return {'nssf': nssf, 't1': t1, 't2': t2, 'shif': shif, 'ahl': ahl,
-            'taxable': taxable, 'paye': paye, 'net': net}
+            'taxable': taxable, 'paye': paye, 'relief_pers': relief_pers,
+            'relief_ins': relief_ins, 'net': net}
 
 
 def load_vectors():

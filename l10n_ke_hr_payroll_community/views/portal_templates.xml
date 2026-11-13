@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_payslips_p9_link"
+              inherit_id="hr_payroll_community.portal_my_payslips"
+              name="My Payslips P9 link">
+        <xpath expr="//div[hasclass('o_portal_my_payslips')]" position="inside">
+            <p><a href="/my/p9">P9 Tax Deduction Cards</a></p>
+        </xpath>
+    </template>
+
+    <template id="portal_my_p9_list" name="My P9 Cards">
+        <t t-call="portal.portal_layout">
+            <t t-set="title">P9 Tax Deduction Cards</t>
+            <div>
+                <h2>P9 Tax Deduction Cards</h2>
+                <t t-if="not years">
+                    <p>No payslips found.</p>
+                </t>
+                <t t-else="">
+                    <ul>
+                        <li t-foreach="years" t-as="y">
+                            <a t-attf-href="/my/p9/#{y}/pdf">Download P9 for <t t-esc="y"/> (PDF)</a>
+                        </li>
+                    </ul>
+                </t>
+                <a class="btn btn-secondary" href="/my/payslips">Back</a>
+            </div>
+        </t>
+    </template>
+</odoo>

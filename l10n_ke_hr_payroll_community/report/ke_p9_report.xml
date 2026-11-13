@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="paperformat_ke_p9_landscape" model="report.paperformat">
+        <field name="name">KE P9 Landscape</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+    </record>
     <record id="action_ke_p9_report" model="ir.actions.report">
         <field name="name">KE P9 Tax Deduction Card</field>
         <field name="model">ke.p9.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ke_hr_payroll_community.ke_p9_template</field>
         <field name="print_report_name">'P9_%s' % object.year</field>
+    </record>
+    <record id="action_ke_p9_individual_report" model="ir.actions.report">
+        <field name="name">KE Individual P9 Card</field>
+        <field name="model">ke.p9.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ke_hr_payroll_community.ke_p9_individual_template</field>
+        <field name="paperformat_id" ref="paperformat_ke_p9_landscape"/>
+        <field name="print_report_name">'P9_%s_%s' % (object.year, (object.employee_id.name or 'employee').replace('/', '_'))</field>
     </record>
 </odoo>

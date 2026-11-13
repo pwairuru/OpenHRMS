@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ke_p9_individual_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="card" t-value="o._get_p9_monthly(o.employee_id, o.year)"/>
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 11px;">
+                        <h4>Kenya Revenue Authority — Tax Deduction Card (P9)</h4>
+                        <p>
+                            Employer: <t t-esc="card['employer']"/>
+                            <t t-if="card['employer_pin']"> (PIN: <t t-esc="card['employer_pin']"/>)</t>
+                            | Employee: <t t-esc="card['employee']"/>
+                            | KRA PIN: <t t-esc="card['kra_pin'] or ''"/>
+                            | ID: <t t-esc="card['id_no'] or ''"/>
+                            | Year: <t t-esc="card['year']"/>
+                        </p>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>A Basic</th>
+                                    <th>D Gross</th>
+                                    <th>E Pension</th>
+                                    <th>F SHIF</th>
+                                    <th>G AHL</th>
+                                    <th>H PRMF</th>
+                                    <th>I Mortgage</th>
+                                    <th>J Total Ded</th>
+                                    <th>K Chargeable</th>
+                                    <th>L Tax Charged</th>
+                                    <th>M Pers Relief</th>
+                                    <th>N Ins Relief</th>
+                                    <th>O PAYE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="card['months']" t-as="r">
+                                    <td><t t-esc="r['month']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['basic']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['gross']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['pension']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['shif']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['ahl']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['prmf']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['mortgage']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['deduct']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['charge']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['tax']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['pers']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['ins']"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % r['paye']"/></td>
+                                </tr>
+                                <tr t-foreach="[card['total']]" t-as="t">
+                                    <td><strong><t t-esc="t['month']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['basic']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['gross']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['pension']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['shif']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['ahl']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['prmf']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['mortgage']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['deduct']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['charge']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['tax']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['pers']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['ins']"/></strong></td>
+                                    <td class="text-end"><strong><t t-esc="'%.2f' % t['paye']"/></strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p t-if="card['total']['recomputed']">
+                            Note: some months pre-date the PAYE relief split, so
+                            columns L/M/N for those months are re-derived from
+                            the stored chargeable pay (same bands and
+                            parameters as the original computation).
+                        </p>
+                        <p>Columns follow the KRA Appendix 2A card (B benefits and C quarters are 0.00: the engine has no non-cash benefit rules yet). O = L − M − N.</p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

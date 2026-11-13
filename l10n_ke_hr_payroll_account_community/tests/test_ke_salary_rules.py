@@ -25,7 +25,10 @@ class TestKeRules(TransactionCase):
 
     Oracle vector (wage=100000, March 2026, default contract flags):
     NSSF Tier I -540 / Tier II -5460 / SHIF -2750 / AHL -1500 /
-    PAYE -19308.35 / NET 70441.65.
+    PAYE gross -21708.35 less personal relief 2400 = net -19308.35 /
+    NET 70441.65. KE_PAYE is the gross band tax; KE_RELIEF_PERS /
+    KE_RELIEF_INS are child credits in the same category, so the
+    category total (what posts to 230140) is the net payable.
     """
 
     # (rule xmlid, leg field, expected account code), shared with
@@ -123,8 +126,23 @@ class TestKeRules(TransactionCase):
         self.assertEqual(totals['KE_NSSF_T2'], -5460.0)
         self.assertEqual(totals['KE_SHIF'], -2750.0)
         self.assertEqual(totals['KE_AHL'], -1500.0)
-        self.assertAlmostEqual(totals['KE_PAYE'], -19308.35, places=2)
+        self.assertAlmostEqual(totals['KE_PAYE'], -21708.35, places=2)
+        self.assertAlmostEqual(totals['KE_RELIEF_PERS'], 2400.0, places=2)
+        self.assertAlmostEqual(totals['KE_RELIEF_INS'], 0.0, places=2)
         self.assertAlmostEqual(totals['KE_NET'], 70441.65, places=2)
+
+    def test_oracle_pension_insurance_relief(self):
+        """Pension 3000 + life 3000 (Dec-2026 batch slips 25/27 style):
+        taxable 86750, gross tax -20808.35, reliefs 2400 + 450,
+        net PAYE -17958.35, NET 71791.65."""
+        totals = self._totals(self._make_slip(
+            100000, date_from='2026-12-01', date_to='2026-12-31',
+            ke_pension=3000.0, ke_insurance_life=3000.0))
+        self.assertAlmostEqual(totals['KE_TAXABLE'], 86750.0, places=2)
+        self.assertAlmostEqual(totals['KE_PAYE'], -20808.35, places=2)
+        self.assertAlmostEqual(totals['KE_RELIEF_PERS'], 2400.0, places=2)
+        self.assertAlmostEqual(totals['KE_RELIEF_INS'], 450.0, places=2)
+        self.assertAlmostEqual(totals['KE_NET'], 71791.65, places=2)
 
     def test_nssf_cap_200k(self):
         totals = self._totals(self._make_slip(200000))
@@ -145,7 +163,8 @@ class TestKeRules(TransactionCase):
         self.assertEqual(totals['KE_NSSF_T2'], -3840.0)
         self.assertEqual(totals['KE_SHIF'], -2750.0)
         self.assertEqual(totals['KE_AHL'], -1500.0)
-        self.assertAlmostEqual(totals['KE_PAYE'], -19812.36, delta=0.05)
+        self.assertAlmostEqual(totals['KE_PAYE'], -22212.36, delta=0.05)
+        self.assertAlmostEqual(totals['KE_RELIEF_PERS'], 2400.0, places=2)
         self.assertAlmostEqual(totals['KE_NET'], 71617.64, delta=0.05)
 
     def test_shif_floor_5k(self):
@@ -219,7 +238,9 @@ class TestKeRules(TransactionCase):
         for xmlid in (
                 'l10n_ke_hr_payroll_community.ke_rule_gross',
                 'l10n_ke_hr_payroll_community.ke_rule_taxable',
-                'l10n_ke_hr_payroll_community.ke_rule_fringe_info'):
+                'l10n_ke_hr_payroll_community.ke_rule_fringe_info',
+                'l10n_ke_hr_payroll_community.ke_rule_relief_pers',
+                'l10n_ke_hr_payroll_community.ke_rule_relief_ins'):
             with self.subTest(rule=xmlid):
                 rule = self._ke_rule(xmlid)
                 self.assertFalse(rule.account_debit_id)

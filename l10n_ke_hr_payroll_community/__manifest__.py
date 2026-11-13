@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Kenya - Payroll (Community)',
-    'version': '20.0.1.0.4',
+    'version': '20.0.1.0.5',
     'category': 'Human Resources/Payroll',
     'summary': 'Kenya statutory payroll for hr_payroll_community',
     'description': 'Salary structures, rules, registers and reports for Kenya (PAYE, NSSF, SHIF, AHL).',
@@ -37,9 +37,11 @@
         'data/hr_salary_rule_data.xml',
         'views/hr_version_views.xml',
         'views/res_config_settings_views.xml',
+        'views/portal_templates.xml',
         'wizard/ke_report_wizard_views.xml',
         'report/ke_p9_report.xml',
         'report/ke_p9_template.xml',
+        'report/ke_p9_individual_template.xml',
     ],
     'license': 'LGPL-3',
     'installable': True,

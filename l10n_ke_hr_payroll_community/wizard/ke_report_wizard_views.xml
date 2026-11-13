@@ -57,6 +57,8 @@
             <form string="P9 Tax Deduction Card">
                 <group>
                     <field name="year"/>
+                    <field name="employee_id" options="{'no_create': True}"
+                           help="Empty = all-employees summary. Set an employee for the detailed individual card (landscape)."/>
                 </group>
                 <footer>
                     <button name="action_print" string="Print PDF"
