@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Kenya - Payroll (Community)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <style>
+        :root {
+          --primary-color: #006633;
+          --accent-color: #BB0000;
+          --bg-white: #fff;
+          --text-color: #121212;
+          --text-color-light: #64728f;
+        }
+        body {
+          font-family: "Montserrat", sans-serif;
+        }
+        .nav-tabs .nav-item.show .nav-link,
+        .nav-tabs .nav-link.active {
+          color: var(--text-color);
+          font-family: Montserrat;
+          font-size: 16px !important;
+          font-weight: 500 !important;
+          border-radius: 30px;
+          line-height: normal;
+          text-transform: capitalize;
+          background-color: #F5F5F5;
+          border: none;
+          margin-bottom: 0;
+          padding: 12px 24px;
+        }
+        .nav-tabs .nav-link:focus,
+        .nav-tabs .nav-link:hover {
+          border-color: transparent;
+          isolation: isolate;
+          box-shadow: none;
+        }
+        .shot-card {
+          border-radius: 10px;
+          background-color: #f4f4f4;
+        }
+        .shot-card img {
+          border-radius: 10px;
+          border: 1px solid #e5e7eb;
+        }
+        .feat-card {
+          border: 1px solid #EBEEF2;
+          border-radius: 12px;
+          padding: 24px;
+          height: 100%;
+          background: #fff;
+          box-shadow: 0px 8px 20px -4px rgba(0, 0, 0, 0.06);
+        }
+        .feat-icon {
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
+          background: #e8f3ec;
+          color: var(--primary-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 22px;
+          margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+<!-- overview -->
+<div class="container">
+    <div class="my-5">
+        <div class="tab-content" id="myTabContent1">
+            <div class="text-center d-flex justify-content-end gap-2 my-3"><span
+                    class="px-3 py-1"
+                    style="background-color:#006633;color: #fff; font-size: 0.8rem;font-weight:600;border: 1px solid #006633;border-radius: 30px;">Community</span>
+            </div>
+            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                 aria-labelledby="home-tab">
+                <div class="position-relative"
+                     style="border-radius: 16px; background: #f8f8f8; padding: 20px 0;">
+                    <div class="row " style="padding: 2rem 0rem 0 !important;">
+                        <div class="col-lg-8 mx-auto gap-4 d-flex flex-column align-items-center">
+                            <h1 class="text-center text-uppercase my-0" style="
+              color: var(--text-color);
+              font-size: 46px;
+              font-weight: 700;
+              line-height: normal;
+            ">
+                                <span>Kenya - Payroll</span>
+                            </h1>
+                            <p class="my-1 text-center text-uppercase" style="
+                letter-spacing: 4px !important;
+                color: var(--primary-color);
+                font-weight: bold;
+                text-align: center;
+              ">
+                                Community Edition
+                            </p>
+                            <p class="m-0"
+                               style="font-size:0.9rem; color:var(--text-color-light); font-size: 16px; font-weight: 400; text-align: center; max-width: 640px;">
+                                Full Kenyan statutory payroll inside Odoo Community:
+                                PAYE, NSSF Tier I/II, SHIF, Affordable Housing Levy
+                                and HELB computed on every slip, with NSSF, SHIF,
+                                AHL, P9 and P10 returns one click away.
+                            </p>
+                            <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
+                                <span class="badge rounded-pill" style="background:#006633;">PAYE</span>
+                                <span class="badge rounded-pill" style="background:#006633;">NSSF Tier I/II</span>
+                                <span class="badge rounded-pill" style="background:#006633;">SHIF</span>
+                                <span class="badge rounded-pill" style="background:#006633;">AHL Levy</span>
+                                <span class="badge rounded-pill" style="background:#006633;">HELB</span>
+                                <span class="badge rounded-pill" style="background:#006633;">P9 + P10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- key points -->
+                <div class="my-5">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="feat-card">
+                                <div class="feat-icon"><i class="fa-solid fa-calculator"></i></div>
+                                <h5><b>Statutory computation chain</b></h5>
+                                <p style="color:var(--text-color-light);">Basic to Gross to NSSF, SHIF, AHL,
+                                    taxable pay, PAYE and Net — evaluated in
+                                    sequence order on the Kenya Regular and
+                                    Bonus structures.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feat-card">
+                                <div class="feat-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                                <h5><b>Dated parameters, no code changes</b></h5>
+                                <p style="color:var(--text-color-light);">PAYE bands, NSSF limits, SHIF rates,
+                                    reliefs and caps live in dated rule
+                                    parameters. New legal years take effect by
+                                    adding rows.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feat-card">
+                                <div class="feat-icon"><i class="fa-solid fa-file-export"></i></div>
+                                <h5><b>One-click statutory extracts</b></h5>
+                                <p style="color:var(--text-color-light);">NSSF, SHIF and AHL schedules, P9 tax
+                                    cards, the P10 Sheet B import CSV and a
+                                    KE-aware Payslip Analysis pivot.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- banner strip -->
+                <div class="my-5">
+                    <div style="padding: 3rem; background-color: #006633; border-radius: 12px; position: relative; overflow: hidden;">
+                        <div style="position:absolute; top:0; left:0; right:0; height:8px; background:#000;"></div>
+                        <div style="position:absolute; top:8px; left:0; right:0; height:4px; background:#fff; opacity:.6;"></div>
+                        <div style="position:absolute; bottom:0; left:0; right:0; height:8px; background:#BB0000;"></div>
+                        <h3 style="font-size: 32px; font-weight: 700; color: #fff; line-height: 48px;">
+                            Kenyan payroll compliance,<br/>inside Odoo Community.
+                        </h3>
+                        <p style="font-size: 18px; font-weight: 400; color: #fff; opacity:.9;">
+                            Enable the Kenya localization in Payroll Settings and
+                            every payslip follows KRA, NSSF, SHA and Housing Levy rules.
+                        </p>
+                    </div>
+                </div>
+                <!-- tabs -->
+                <div class="mb-4 bg-white"
+                     style="border: 1px solid #EBEEF2; border-radius: 6px; box-shadow: 0px 8px 20px -4px rgba(0, 0, 0, 0.10);">
+                    <div>
+                        <ul class="nav nav-tabs justify-content-center bg-white py-2"
+                            id="myTab" role="tablist" style="border-radius: 6px 6px 0 0;">
+                            <li class="nav-item">
+                                <a aria-controls="overview"
+                                   class="nav-link active" data-bs-toggle="tab"
+                                   href="#overview" id="overview-tab" role="tab"
+                                   style="color:#121212; font-weight:500; font-size:16px">
+                                    Screenshots</a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-controls="feature" class="nav-link py-2"
+                                   data-bs-toggle="tab"
+                                   href="#feature" id="feature-tab" role="tab"
+                                   style="color:#121212; font-weight:500; font-size:16px">Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-controls="faq" class="nav-link"
+                                   data-bs-toggle="tab" href="#faq"
+                                   id="faq-tab" role="tab"
+                                   style="color:#121212; font-weight:500; font-size:16px">
+                                    FAQs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-controls="releases" class="nav-link"
+                                   data-bs-toggle="tab"
+                                   href="#releases" id="releases-tab" role="tab"
+                                   style="color:#121212; font-weight:500; font-size:16px">Releases</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content p-md-5 p-2 py-3" id="myTabContent">
+                        <div aria-labelledby="overview-tab"
+                             class="tab-pane fade show active" id="overview"
+                             role="tabpanel">
+                            <div class="position-relative mb-4 shot-card">
+                                <div class="p-md-5 p-3 position-relative">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 style="font-weight:700; line-height:120%; text-align:center; font-size: 40px;">
+                                                <span style="color:#121212;">Computed payslip, clean codes</span>
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <p style="font-weight:400; font-size:16px; line-height:150%; text-align:center; color:var(--text-color-light)">
+                                                Every slip runs the Kenya chain — Basic, Gross, NSSF Tier I/II,
+                                                SHIF, AHL, PAYE and Net — and prints without the KE_ engine prefix.
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="d-inline-block p-3 shadow-sm"
+                                                 style="background-color:#fff; border-radius:10px">
+                                                <img alt="Kenya payslip with statutory lines" class="img-fluid"
+                                                     loading="lazy"
+                                                     src="./assets/screenshots/payslip_lines.png"
+                                                     style="min-height: 1px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mb-4 shot-card">
+                                <div class="p-md-5 p-3 position-relative">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 style="font-weight:700; line-height:120%; text-align:center; font-size: 40px;">
+                                                <span style="color:#121212;">Payslip Analysis that understands Kenya</span>
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <p style="font-weight:400; font-size:16px; line-height:150%; text-align:center; color:var(--text-color-light)">
+                                                The pivot maps KE_BASIC, KE_GROSS and KE_NET into the
+                                                Basic / Gross / Net measures — no more all-zero reports.
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="d-inline-block p-3 shadow-sm"
+                                                 style="background-color:#fff; border-radius:10px">
+                                                <img alt="Payslip Analysis pivot with Kenya totals" class="img-fluid"
+                                                     loading="lazy"
+                                                     src="./assets/screenshots/pivot.png"
+                                                     style="min-height: 1px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mb-4 shot-card">
+                                <div class="p-md-5 p-3 position-relative">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 style="font-weight:700; line-height:120%; text-align:center; font-size: 40px;">
+                                                <span style="color:#121212;">Kenya contract fields</span>
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <p style="font-weight:400; font-size:16px; line-height:150%; text-align:center; color:var(--text-color-light)">
+                                                KRA PIN, NSSF and SHIF numbers, pension, mortgage and
+                                                post-retirement medical deductions, insurance premiums,
+                                                HELB, disability, secondary-employer and non-resident flags.
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="d-inline-block p-3 shadow-sm"
+                                                 style="background-color:#fff; border-radius:10px">
+                                                <img alt="Contract with Kenya statutory fields" class="img-fluid"
+                                                     loading="lazy"
+                                                     src="./assets/screenshots/contract.png"
+                                                     style="min-height: 1px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mb-4 shot-card">
+                                <div class="p-md-5 p-3 position-relative">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 style="font-weight:700; line-height:120%; text-align:center; font-size: 40px;">
+                                                <span style="color:#121212;">One-click NSSF schedule</span>
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <p style="font-weight:400; font-size:16px; line-height:150%; text-align:center; color:var(--text-color-light)">
+                                                Pick the month and export the XLSX: ID number, NSSF number,
+                                                Tier I, Tier II and totals — paid slips included.
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="d-inline-block p-3 shadow-sm"
+                                                 style="background-color:#fff; border-radius:10px">
+                                                <img alt="NSSF report wizard" class="img-fluid"
+                                                     loading="lazy"
+                                                     src="./assets/screenshots/nssf_wizard.png"
+                                                     style="min-height: 1px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mb-4 shot-card">
+                                <div class="p-md-5 p-3 position-relative">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 style="font-weight:700; line-height:120%; text-align:center; font-size: 40px;">
+                                                <span style="color:#121212;">Selectable in Payroll Settings</span>
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <p style="font-weight:400; font-size:16px; line-height:150%; text-align:center; color:var(--text-color-light)">
+                                                Payroll Settings carries a Kenya Payroll toggle, and the module
+                                                sits in the Accounting / Localization category so the
+                                                Choose-a-Payroll-Localization list finds it.
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="d-inline-block p-3 shadow-sm"
+                                                 style="background-color:#fff; border-radius:10px">
+                                                <img alt="Payroll settings with Kenya toggle" class="img-fluid"
+                                                     loading="lazy"
+                                                     src="./assets/screenshots/settings.png"
+                                                     style="min-height: 1px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="position-relative mb-4 shot-card">
+                                <div class="p-md-5 p-3 position-relative">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 style="font-weight:700; line-height:120%; text-align:center; font-size: 40px;">
+                                                <span style="color:#121212;">Payslips with live totals</span>
+                                            </h1>
+                                        </div>
+                                        <div class="col-md-12 mb-4">
+                                            <p style="font-weight:400; font-size:16px; line-height:150%; text-align:center; color:var(--text-color-light)">
+                                                Basic, Gross and Net wages compute on every validated slip
+                                                and flow into batches, registers and accounting.
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="d-inline-block p-3 shadow-sm"
+                                                 style="background-color:#fff; border-radius:10px">
+                                                <img alt="Employee payslips list with computed wages" class="img-fluid"
+                                                     loading="lazy"
+                                                     src="./assets/screenshots/payslip_top.png"
+                                                     style="min-height: 1px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-labelledby="feature-tab" class="tab-pane fade"
+                             id="feature" role="tabpanel">
+                            <div class="row g-4">
+                                <div class="col-md-6"><div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-scale-balanced"></i></div><h5><b>PAYE with reliefs</b></h5><p style="color:var(--text-color-light);">Graduated monthly bands, personal relief, 15% insurance relief capped monthly, certified-disability exemption, secondary-employer and non-resident handling.</p></div></div>
+                                <div class="col-md-6"><div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-layer-group"></i></div><h5><b>NSSF Tier I / Tier II split</b></h5><p style="color:var(--text-color-light);">6% to the Lower Earnings Limit plus 6% of the band above it, with dated LEL/UEL history and legacy single-line fallback on old slips.</p></div></div>
+                                <div class="col-md-6"><div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-heart-pulse"></i></div><h5><b>SHIF + Affordable Housing Levy</b></h5><p style="color:var(--text-color-light);">2.75% of gross with the 300 floor for SHA, 1.5% housing levy — both as contribution registers feeding the statutory schedules.</p></div></div>
+                                <div class="col-md-6"><div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-graduation-cap"></i></div><h5><b>HELB, fringe benefits, bonus payroll</b></h5><p style="color:var(--text-color-light);">Fixed HELB deductions, informational fringe-benefit lines, and a Bonus structure that runs the tax chain only.</p></div></div>
+                                <div class="col-md-6"><div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-id-card"></i></div><h5><b>P9 + P10 returns</b></h5><p style="color:var(--text-color-light);">Yearly P9 tax deduction cards (summary and per-employee detail) plus the monthly P10 Sheet B import CSV for KRA iTax.</p></div></div>
+                                <div class="col-md-6"><div class="feat-card"><div class="feat-icon"><i class="fa-solid fa-book"></i></div><h5><b>Accounting bridge</b></h5><p style="color:var(--text-color-light);">Pair with the KE payroll-account module to post each rule to its KRA/NSSF/SHA/expense account with partner-aware move lines.</p></div></div>
+                            </div>
+                        </div>
+                        <div aria-labelledby="faq-tab" class="tab-pane fade"
+                             id="faq" role="tabpanel">
+                            <div class="accordion" id="faqAcc">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#fq1">How do I enable Kenya payroll?</button></h2>
+                                    <div id="fq1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc"><div class="accordion-body">Payroll → Configuration → Settings, tick Kenya Payroll. Assign contracts the Kenya structure and fill the statutory numbers on the contract.</div></div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fq2">How do new NSSF limits or PAYE bands take effect?</button></h2>
+                                    <div id="fq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Add a dated KE rule-parameter row valid from the legal start date. Slips read the parameter valid on their start date — no rule edits, no upgrades of historical slips.</div></div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fq3">Why do rule codes start with KE_ in the database?</button></h2>
+                                    <div id="fq3" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">The salary engine keys every rule by code in one shared namespace, and bare BASIC/GROSS/NET already belong to the base module. Printed reports strip the prefix automatically.</div></div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fq4">Are paid slips included in the statutory extracts?</button></h2>
+                                    <div id="fq4" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Yes. Paid slips are final payroll records and are included in NSSF, SHIF, AHL, P9 and P10; drafts never are.</div></div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fq5">Does it work with secondary employers and non-residents?</button></h2>
+                                    <div id="fq5" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body">Yes. Secondary-employer contracts get no personal or insurance relief; non-resident contracts additionally lose the pension/mortgage/post-med deductions.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-labelledby="releases-tab" class="tab-pane fade"
+                             id="releases" role="tabpanel">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>20.0.1.0.10</b> — Full Apps-page documentation.</li>
+                                <li class="list-group-item"><b>20.0.1.0.9</b> — Kenya appears in the Choose-a-Payroll-Localization Apps list; Apps-page category fix.</li>
+                                <li class="list-group-item"><b>20.0.1.0.7</b> — Kenya toggle renders in Payroll Settings; clean printed codes (no KE_ prefix).</li>
+                                <li class="list-group-item"><b>20.0.1.0.4</b> — Statutory extracts repaired: paid slips included, legacy NSSF fallback, KE-aware pivot, attachment downloads, P9 cells.</li>
+                                <li class="list-group-item"><b>20.0.1.0.2</b> — NSSF Tier I/II split with migration.</li>
+                                <li class="list-group-item"><b>20.0.1.0.0</b> — Initial Kenya localization: structures, dated parameters, core rules, NSSF/SHIF/P9 reports.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</html>
