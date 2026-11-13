@@ -165,7 +165,7 @@ class KeP9Wizard(models.TransientModel):
 
     def _get_p9_data(self):
         """Per-employee yearly totals from done/paid slips: gross/nssf/shif/ahl/paye."""
-        slips = self.env['hr.payslip'].search(
+        slips = self.env['hr.payslip'].sudo().search(
             [('state', 'in', ('done', 'paid'))])
         slips = slips.filtered(
             lambda s: s.date_from
@@ -208,7 +208,10 @@ class KeP9Wizard(models.TransientModel):
             'l10n_ke_hr_payroll_community.action_ke_p9_report').report_action(self)
 
     def _p9_param(self, code, date):
-        return self.env['ke.hr.rule.parameter'].get_value(code, date)
+        # Dated statutory rates are public data; sudo so the individual
+        # card also renders for non-payroll users on /report/download,
+        # where the builder runs in the clicking user's env.
+        return self.env['ke.hr.rule.parameter'].sudo().get_value(code, date)
 
     def _p9_recompute_lmno(self, chargeable, contract, date, pension_ded,
                            mortgage, post_med):
@@ -256,7 +259,7 @@ class KeP9Wizard(models.TransientModel):
         New slips read L/M/N from their lines; older net-only slips
         re-derive them (same math, documented in each TOTAL row note).
         """
-        slips = self.env['hr.payslip'].search([
+        slips = self.env['hr.payslip'].sudo().search([
             ('employee_id', '=', employee.id),
             ('state', 'in', ('done', 'paid')),
         ]).filtered(
@@ -266,6 +269,10 @@ class KeP9Wizard(models.TransientModel):
         )
         if not slips:
             raise UserError('No Done payslips for employee and year')
+        # Report-internal reads (ID number, contracts) run as sudo: the
+        # wizard already pins the employee, and the caller established
+        # authorization (slip visibility / portal ownership).
+        employee = employee.sudo()
         months = []
         latest_contract = slips.sorted('date_from')[-1].contract_id
         for m in range(1, 13):

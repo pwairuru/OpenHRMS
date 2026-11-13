@@ -4,3 +4,4 @@ ke_hr_rule_parameter_multi_company,KE parameter multi company,model_ke_hr_rule_p
 access_ke_nssf_wizard,access.ke.nssf.wizard,model_ke_nssf_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
 access_ke_shif_wizard,access.ke.shif.wizard,model_ke_shif_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
 access_ke_p9_wizard,access.ke.p9.wizard,model_ke_p9_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
+access_ke_p9_wizard_employee,Employee: P9 wizard read,model_ke_p9_wizard,base.group_user,r,

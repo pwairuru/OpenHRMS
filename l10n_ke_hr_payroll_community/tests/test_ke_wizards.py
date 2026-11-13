@@ -180,15 +180,21 @@ class TestKeWizards(TransactionCase):
 
     def test_print_p9_lay_user(self):
         """Backend Print P9 as a non-payroll user: the reported Access
-        Error (create on ke.p9.wizard) must not happen. The wizard is a
-        transient carrier created as sudo; the caller already passed the
-        hr.payslip record rules to open the slip."""
+        Error (ke.p9.wizard) must not happen, on the button action nor on
+        the /report/download render that follows it. The wizard is a
+        transient carrier created as sudo (the caller already passed the
+        hr.payslip record rules to open the slip); the download only needs
+        employee-level wizard read."""
         user, slip = self._lay_user_slip()
         action = slip.with_user(user).action_print_p9()
         self.assertEqual(action['type'], 'ir.actions.report')
         self.assertEqual(
             action['report_name'],
             'l10n_ke_hr_payroll_community.ke_p9_individual_template')
+        wiz = self.env['ke.p9.wizard'].browse(action['context']['active_ids'])
+        pdf, _ = self.env['ir.actions.report'].with_user(user)._render_qweb_pdf(
+            action['report_name'], res_ids=wiz.ids)
+        self.assertTrue(pdf)
 
     def test_p9_wizard_stays_restricted(self):
         """The sudo is narrow: direct ke.p9.wizard writes by a non-payroll
