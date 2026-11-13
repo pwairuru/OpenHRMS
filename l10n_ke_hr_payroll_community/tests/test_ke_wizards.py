@@ -138,6 +138,22 @@ class TestKeWizards(TransactionCase):
         self.assertIn('KE_GROSS', select)
         self.assertIn('KE_NET', select)
 
+    def test_ke_localization_selectable_in_settings(self):
+        self.assertIn(
+            'module_l10n_ke_hr_payroll_community',
+            self.env['res.config.settings']._fields)
+        view = self.env.ref(
+            'l10n_ke_hr_payroll_community.res_config_settings_view_form_ke')
+        self.assertIn('module_l10n_ke_hr_payroll_community', view.arch_db)
+        mod = self.env['ir.module.module'].search(
+            [('name', '=', 'l10n_ke_hr_payroll_community')], limit=1)
+        path, cat = [], mod.category_id
+        while cat:
+            path.append(cat.name)
+            cat = cat.parent_id
+        self.assertEqual(list(reversed(path)),
+                         ['Accounting', 'Localization', 'Payroll'])
+
     def test_payslip_code_prints_without_prefix(self):
         slip = self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
         html = self.env['ir.qweb']._render(
