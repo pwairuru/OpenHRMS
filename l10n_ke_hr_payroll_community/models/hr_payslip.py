@@ -29,3 +29,16 @@ class HrPayslip(models.Model):
         if not rec:
             raise UserError('Missing KE payroll parameter: %s' % code)
         return ast.literal_eval(rec.value)
+
+    def action_print_p9(self):
+        """Print this slip's employee P9 card for the slip's year."""
+        self.ensure_one()
+        if not self.date_from:
+            raise UserError('Set the payslip dates first.')
+        wizard = self.env['ke.p9.wizard'].create({
+            'year': self.date_from.year,
+            'employee_id': self.employee_id.id,
+        })
+        return self.env.ref(
+            'l10n_ke_hr_payroll_community.action_ke_p9_individual_report'
+        ).report_action(wizard)

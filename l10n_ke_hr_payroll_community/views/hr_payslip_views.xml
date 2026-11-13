@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_form_p9_button" model="ir.ui.view">
+        <field name="name">hr.payslip.view.form.p9.button</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_print_own_payslip']" position="after">
+                <button string="Print P9" name="action_print_p9" type="object"
+                        class="oe_highlight" invisible="state not in ('done', 'paid')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
