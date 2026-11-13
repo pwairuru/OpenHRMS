@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kenya rule codes print without the KE_ engine prefix.
+
+    DB codes keep the KE_ prefix for global uniqueness (the salary
+    engine keys every rule by code in one shared namespace, and bare
+    BASIC/GROSS/NET already belong to the base module). Only the
+    printed label is shortened; nothing here changes stored data. -->
+    <template id="ke_report_payslip_code_display"
+            inherit_id="hr_payroll_community.report_payslip">
+        <xpath expr="//span[@t-field='line.code']" position="replace">
+            <span t-out="(line.code or '').replace('KE_', '', 1)"/>
+        </xpath>
+    </template>
+    <template id="ke_report_payslipdetails_code_display"
+            inherit_id="hr_payroll_community.report_payslipdetails">
+        <xpath expr="//span[@t-field='line.code']" position="replace">
+            <span t-out="(line.code or '').replace('KE_', '', 1)"/>
+        </xpath>
+        <xpath expr="//span[@t-out=&quot;p.get('code', '')&quot;]" position="replace">
+            <span t-out="(p.get('code') or '').replace('KE_', '', 1)"/>
+        </xpath>
+    </template>
+    <template id="ke_report_contributionregister_code_display"
+            inherit_id="hr_payroll_community.report_contributionregister">
+        <xpath expr="//span[@t-out=&quot;line.get('code', '')&quot;]" position="replace">
+            <span t-out="(line.get('code') or '').replace('KE_', '', 1)"/>
+        </xpath>
+    </template>
+</odoo>

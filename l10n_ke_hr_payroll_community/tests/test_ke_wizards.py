@@ -138,6 +138,13 @@ class TestKeWizards(TransactionCase):
         self.assertIn('KE_GROSS', select)
         self.assertIn('KE_NET', select)
 
+    def test_payslip_code_prints_without_prefix(self):
+        slip = self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
+        html = self.env['ir.qweb']._render(
+            'hr_payroll_community.report_payslip', {'docs': slip})
+        self.assertNotIn('KE_NSSF_T1', html)
+        self.assertIn('NSSF_T1', html)
+
     def test_p9_template_renders_cells(self):
         self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
         wiz = self.env['ke.p9.wizard'].create({'year': 2026})
