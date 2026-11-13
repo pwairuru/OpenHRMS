@@ -35,4 +35,3 @@ access_hr_payslip_worked_days_employee,Employee: own worked days read,hr.payslip
 access_hr_salary_rule_category_employee,Employee: salary rule categories read,hr.salary.rule.category,base.group_user,r,
 access_hr_salary_rule_employee,Employee: salary rules read,hr.salary.rule,base.group_user,r,
 access_hr_payroll_structure_employee,Employee: payroll structures read,hr.payroll.structure,base.group_user,r,
-access_hr_version_employee,Employee: own contract read,hr.version,base.group_user,r,"[('employee_id.user_id', '=', user.id)]"

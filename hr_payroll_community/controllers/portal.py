@@ -66,15 +66,13 @@ class PayslipPortal(CustomerPortal):
         payslip = self._get_own_payslip(payslip_id)
         if hasattr(payslip, 'status_code'):
             return payslip
-        report = request.env.ref(
-            'hr_payroll_community.report_payslip', raise_if_not_found=False)
-        if not report:
-            return request.not_found()
-        pdf, _ = report.sudo()._render_qweb_pdf([payslip.id])
+        pdf, _ = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
+            'hr_payroll_community.hr_payslip_report_action',
+            res_ids=[payslip.id])
         return request.make_response(
             pdf,
             headers=[
                 ('Content-Type', 'application/pdf'),
                 ('Content-Disposition',
-                 f'attachment; filename=Payslip-{payslip.number or payslip.id}.pdf'),
+                 'attachment; filename=%s' % payslip.sudo()._get_payslip_pdf_filename()),
             ])

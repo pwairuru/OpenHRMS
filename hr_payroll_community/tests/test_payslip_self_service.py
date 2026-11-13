@@ -61,17 +61,7 @@ class TestPayslipSelfService(TransactionCase):
             'date_to': '2026-02-28',
             'state': 'draft',
         })
-        Version = cls.env['hr.version']
-        calendar = cls.env.ref('resource.resource_calendar_std')
-        cls.contract_a = Version.create({
-            'name': 'Contract A',
-            'employee_id': cls.emp_a.id,
-            'date_version': '2026-01-01',
-            'resource_calendar_id': calendar.id,
-            'hr_responsible_id': cls.env.ref('base.user_admin').id,
-            'wage': 100000.0,
-        })
-        cls.slip_a.write({'contract_id': cls.contract_a.id})
+
 
     def _payslip_as(self, user):
         return self.env['hr.payslip'].with_user(user)
@@ -101,17 +91,18 @@ class TestPayslipSelfService(TransactionCase):
             with self.assertRaises(AccessError):
                 line.with_user(self.user_a).read(['name'])
 
-    def test_own_contract_readable(self):
-        """Form shows own contract link. Others stay hidden."""
-        contract = self.env['hr.version'].with_user(self.user_a).search(
-            [('employee_id', '=', self.emp_a.id)], limit=1)
-        self.assertTrue(contract)
-        contract.read(['name'])
-        other = self.env['hr.version'].search(
-            [('employee_id', '=', self.emp_b.id)], limit=1)
-        if other:
-            with self.assertRaises(AccessError):
-                other.with_user(self.user_a).read(['name'])
+    def test_pdf_filename_has_month(self):
+        self.slip_a.write({'number': 'SLIP/A'})
+        self.assertEqual(
+            self.slip_a._get_payslip_pdf_filename(),
+            'Payslip-January-2026-A.pdf')
+
+    def test_send_mail_defaults_to_employee(self):
+        self.slip_a.write({'contract_id': False})
+        action = self.slip_a.with_user(self.user_a).action_payslip_send()
+        self.assertEqual(action['res_model'], 'mail.compose.message')
+        partner = self.emp_a.work_contact_id
+        self.assertIn(partner.id, action['context']['default_partner_ids'])
 
     def test_print_own_payslip_url(self):
         action = self.slip_a.with_user(self.user_a).action_print_own_payslip()
@@ -119,6 +110,22 @@ class TestPayslipSelfService(TransactionCase):
         self.assertIn('/my/payslip/%s/pdf' % self.slip_a.id, action['url'])
         with self.assertRaises(AccessError):
             self.slip_b.with_user(self.user_a).action_print_own_payslip()
+
+    def test_officer_print_any_payslip(self):
+        officer_group = self.env.ref(
+            'hr_payroll_community.group_hr_payroll_community_user')
+        officer = self.env['res.users'].with_context(
+            no_reset_password=True).create({
+                'name': 'Payroll Printer',
+                'login': 'payroll_printer_selftest',
+                'email': 'printer_selftest@example.com',
+                'group_ids': [(6, 0, [
+                    self.env.ref('base.group_user').id,
+                    officer_group.id,
+                ])],
+            })
+        action = self.slip_b.with_user(officer).action_print_own_payslip()
+        self.assertEqual(action['type'], 'ir.actions.report')
 
     def test_reference_data_readable(self):
         """Form render needs rule/category/structure names. No manual grants."""

@@ -15,7 +15,7 @@
                     ]]>
             </field>
             <field name="report_template_ids" eval="[(4, ref('hr_payroll_community.hr_payslip_report_action'))]"/>
-            <field name="template_fs">{{(object.number or '').replace('/','_')}}</field>
+            <field name="template_fs">{{ object._get_payslip_filename_base() }}</field>
         </record>
     </data>
 </odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payslip mail is always for the slip owner: lock To/Cc so a slip
+         can never be addressed to someone else by mistake. -->
+    <record id="mail_compose_message_view_form_payslip_lock" model="ir.ui.view">
+        <field name="name">mail.compose.message.view.form.payslip.lock</field>
+        <field name="model">mail.compose.message</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="(//field[@name='partner_ids'])[1]" position="attributes">
+                <attribute name="readonly">context.get('default_message_id') or model == 'hr.payslip'</attribute>
+            </xpath>
+            <xpath expr="(//field[@name='partner_ids'])[2]" position="attributes">
+                <attribute name="readonly">model == 'hr.payslip'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_cc_ids']" position="attributes">
+                <attribute name="readonly">context.get('default_message_id') or model == 'hr.payslip'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_cc_allowed']/.." position="attributes">
+                <attribute name="invisible">partner_cc_allowed or model == 'hr.payslip'</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

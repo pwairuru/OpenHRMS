@@ -58,6 +58,7 @@
         'views/hr_payslip_views.xml',
         'views/hr_payslip_mine_views.xml',
         'views/portal_templates.xml',
+        'views/mail_compose_message_views.xml',
         'views/hr_payslip_line_views.xml',
         'views/hr_employee_views.xml',
         'views/hr_payslip_run_views.xml',

@@ -91,6 +91,10 @@
                             name="action_payslip_send"
                             type="object"
                             class="oe_highlight" invisible="state not in ('done', 'paid') or is_send_mail == True"/>
+                    <button string="Print Payslip"
+                            name="action_print_own_payslip"
+                            type="object"
+                            class="oe_highlight" invisible="state not in ('done', 'paid')"/>
                     <button string="Set to Draft" name="action_payslip_draft"
                             type="object" invisible="state != 'cancel'"/>
                     <button string="Compute Sheet" name="action_compute_sheet"

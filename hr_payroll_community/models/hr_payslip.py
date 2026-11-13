@@ -19,7 +19,7 @@ import re
 from datetime import date, datetime, time
 from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import AccessError, UserError, ValidationError
 import babel
 
 # This will generate 16th of days
@@ -327,6 +327,45 @@ class HrPayslip(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    def _get_payslip_filename_base(self):
+        """Filename base with month and no redundant SLIP word, e.g.
+        Payslip-January-2026-A."""
+        self.ensure_one()
+        month = self.date_from.strftime('%B-%Y') if self.date_from else 'undated'
+        number = (self.number or 'payslip').replace('/', '_')
+        number = re.sub(r'(?i)^slip[_-]*', '', number).strip('_-') or 'payslip'
+        return 'Payslip-%s-%s' % (month, number)
+
+    def _get_payslip_pdf_filename(self):
+        """Download filename, e.g. Payslip-January-2026-A.pdf."""
+        return '%s.pdf' % self._get_payslip_filename_base()
+
+    def action_print_own_payslip(self):
+        """Print a done/paid payslip.
+
+        The owner gets the portal PDF (ownership re-checked there, sudo
+        render so restricted fields resolve without backend grants).
+        Payroll officers/managers/accountants get the standard backend
+        report for any slip. Anyone else is blocked.
+        """
+        self.ensure_one()
+        if self.employee_id.user_id.id == self.env.user.id:
+            return {
+                'type': 'ir.actions.act_url',
+                'url': '/my/payslip/%s/pdf' % self.id,
+                'target': 'new',
+            }
+        user = self.env.user
+        if user.has_group(
+                'hr_payroll_community.group_hr_payroll_community_user') or \
+                user.has_group(
+                    'hr_payroll_community.group_hr_payroll_community_manager') or \
+                user.has_group('account.group_account_invoice') or \
+                user.has_group('account.group_account_manager'):
+            return self.env.ref(
+                'hr_payroll_community.hr_payslip_report_action').report_action(self)
+        raise AccessError(_("You can only print your own payslip."))
 
     def action_payslip_cancel(self):
         """Function for change stage of Payslip"""
