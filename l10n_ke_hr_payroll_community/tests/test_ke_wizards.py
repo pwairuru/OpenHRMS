@@ -147,12 +147,12 @@ class TestKeWizards(TransactionCase):
         self.assertIn('module_l10n_ke_hr_payroll_community', view.arch_db)
         mod = self.env['ir.module.module'].search(
             [('name', '=', 'l10n_ke_hr_payroll_community')], limit=1)
-        path, cat = [], mod.category_id
-        while cat:
-            path.append(cat.name)
-            cat = cat.parent_id
-        self.assertEqual(list(reversed(path)),
-                         ['Accounting', 'Localization', 'Payroll'])
+        # Pinned to the canonical filtered category: the Apps
+        # "Choose a Payroll Localization" list exact-matches
+        # base.module_category_accounting_localizations.
+        self.assertEqual(
+            mod.category_id,
+            self.env.ref('base.module_category_accounting_localizations'))
 
     def test_payslip_code_prints_without_prefix(self):
         slip = self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
