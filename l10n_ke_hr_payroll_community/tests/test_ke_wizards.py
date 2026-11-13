@@ -21,6 +21,7 @@ Regression cover for the empty-November-2026 NSSF statement: the report
 filtered ``state == 'done'`` so paid slips were invisible, and after the
 Tier I/II split it summed only the new codes, zeroing pre-split slips.
 """
+from odoo.exceptions import AccessError
 from odoo.tests.common import TransactionCase
 
 from ..wizard.ke_report_wizard import _nssf_total, _period_slips
@@ -143,3 +144,55 @@ class TestKeWizards(TransactionCase):
         html = self.env['ir.qweb']._render(
             'l10n_ke_hr_payroll_community.ke_p9_template', {'docs': wiz})
         self.assertIn('100000.00', html)
+
+    def _lay_user_slip(self):
+        user = self.env['res.users'].with_context(
+            no_reset_password=True).create({
+                'name': 'P9 Lay User',
+                'login': 'p9_lay_user',
+                'email': 'p9_lay_user@example.com',
+                'group_ids': [(6, 0, [self.env.ref('base.group_user').id])],
+            })
+        employee = user.employee_id
+        if not employee:
+            employee = self.env['hr.employee'].create({
+                'name': 'P9 Lay Employee',
+                'user_id': user.id,
+                'company_id': self._company().id,
+            })
+        self.assertEqual(employee.user_id, user)
+        contract = self.env['hr.version'].search(
+            [('employee_id', '=', employee.id)], limit=1)
+        contract.write({'wage': 100000.0,
+                        'contract_date_start': '2026-01-01'})
+        slip = self.env['hr.payslip'].create({
+            'employee_id': employee.id,
+            'contract_id': contract.id,
+            'struct_id': self.env.ref(
+                'l10n_ke_hr_payroll_community.ke_structure_regular').id,
+            'date_from': '2026-03-01',
+            'date_to': '2026-03-31',
+            'company_id': self._company().id,
+            'journal_id': self._journal(self._company()).id,
+        })
+        slip.action_payslip_done()
+        return user, slip
+
+    def test_print_p9_lay_user(self):
+        """Backend Print P9 as a non-payroll user: the reported Access
+        Error (create on ke.p9.wizard) must not happen. The wizard is a
+        transient carrier created as sudo; the caller already passed the
+        hr.payslip record rules to open the slip."""
+        user, slip = self._lay_user_slip()
+        action = slip.with_user(user).action_print_p9()
+        self.assertEqual(action['type'], 'ir.actions.report')
+        self.assertEqual(
+            action['report_name'],
+            'l10n_ke_hr_payroll_community.ke_p9_individual_template')
+
+    def test_p9_wizard_stays_restricted(self):
+        """The sudo is narrow: direct ke.p9.wizard writes by a non-payroll
+        user are still refused. No general access opened."""
+        user, _slip = self._lay_user_slip()
+        with self.assertRaises(AccessError):
+            self.env['ke.p9.wizard'].with_user(user).create({'year': 2026})

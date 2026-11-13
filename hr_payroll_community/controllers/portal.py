@@ -10,7 +10,6 @@
 #
 #############################################################################
 from odoo import http
-from odoo.exceptions import AccessError
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
 
@@ -23,15 +22,28 @@ class PayslipPortal(CustomerPortal):
             [('user_id', '=', request.env.user.id)], limit=1)
 
     def _get_own_payslip(self, payslip_id):
-        payslip = request.env['hr.payslip'].browse(int(payslip_id))
+        """Owner-only gate for portal payslip routes.
+
+        Explicit ownership + validated-state + company checks, because the
+        routes below render as sudo and portal users (group_portal) carry
+        no hr.payslip ACL at all, so check_access would 404 every portal
+        user. The ACLs (own done/paid slips) still guard the backend; here
+        the same policy is enforced directly: only the linked employee's
+        done/paid slips in the user's companies. In particular draft slips
+        are never exposed, even to the owner.
+        """
+        try:
+            payslip = request.env['hr.payslip'].browse(int(payslip_id))
+        except ValueError:
+            return request.not_found()
         if not payslip.exists():
             return request.not_found()
         employee = self._get_employee()
         if not employee or payslip.employee_id.id != employee.id:
             return request.not_found()
-        try:
-            payslip.check_access('read')
-        except AccessError:
+        if payslip.state not in ('done', 'paid'):
+            return request.not_found()
+        if payslip.company_id not in request.env.user.company_ids:
             return request.not_found()
         return payslip
 
@@ -39,7 +51,8 @@ class PayslipPortal(CustomerPortal):
     def portal_my_payslips(self, **kw):
         employee = self._get_employee()
         payslips = request.env['hr.payslip'].search(
-            [('employee_id', '=', employee.id)] if employee else [('id', '=', 0)],
+            [('employee_id', '=', employee.id),
+             ('state', 'in', ('done', 'paid'))] if employee else [('id', '=', 0)],
             order='date_to desc, id desc',
         )
         return request.render(
