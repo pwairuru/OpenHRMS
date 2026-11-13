@@ -107,6 +107,7 @@ module to post the matching journal entries.
         'report/ke_p9_template.xml',
         'report/ke_code_display_templates.xml',
         'report/ke_p9_individual_template.xml',
+        'report/ke_payslip_ids_template.xml',
     ],
     'license': 'LGPL-3',
     'installable': True,

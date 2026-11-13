@@ -161,6 +161,23 @@ class TestKeWizards(TransactionCase):
         self.assertNotIn('KE_NSSF_T1', html)
         self.assertIn('NSSF_T1', html)
 
+    def test_payslip_shows_ke_ids(self):
+        slip = self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
+        slip.contract_id.write({
+            'ke_kra_pin': 'A111111111Z',
+            'ke_nssf_no': 'NSSF-9',
+            'ke_shif_no': 'SHIF-9',
+        })
+        for template in ('hr_payroll_community.report_payslip',
+                         'hr_payroll_community.report_payslipdetails'):
+            html = self.env['ir.qweb']._render(
+                template,
+                {'docs': slip,
+                 'get_lines_by_contribution_register': {}})
+            self.assertIn('A111111111Z', html)
+            self.assertIn('NSSF-9', html)
+            self.assertIn('SHIF-9', html)
+
     def test_p9_template_renders_cells(self):
         self._slip(100000, '2026-11-01', '2026-11-30', 'paid')
         wiz = self.env['ke.p9.wizard'].create({'year': 2026})
