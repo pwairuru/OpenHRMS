@@ -5,7 +5,7 @@
             <t t-foreach="docs" t-as="o">
                 <t t-set="card" t-value="o._get_p9_monthly(o.employee_id, o.year)"/>
                 <t t-call="web.external_layout">
-                    <div class="page" style="font-size: 11px;">
+                    <div class="page" style="font-size: 10px;">
                         <h4>Kenya Revenue Authority — Tax Deduction Card (P9)</h4>
                         <p>
                             Employer: <t t-out="card['employer']"/>
@@ -20,6 +20,8 @@
                                 <tr>
                                     <th>Month</th>
                                     <th>A Basic</th>
+                                    <th>B Benefits</th>
+                                    <th>C Quarters</th>
                                     <th>D Gross</th>
                                     <th>E Pension</th>
                                     <th>F SHIF</th>
@@ -38,6 +40,8 @@
                                 <tr t-foreach="card['months']" t-as="r">
                                     <td><t t-out="r['month']"/></td>
                                     <td class="text-end"><t t-out="'%.2f' % r['basic']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['benefits']"/></td>
+                                    <td class="text-end"><t t-out="'%.2f' % r['quarters']"/></td>
                                     <td class="text-end"><t t-out="'%.2f' % r['gross']"/></td>
                                     <td class="text-end"><t t-out="'%.2f' % r['pension']"/></td>
                                     <td class="text-end"><t t-out="'%.2f' % r['shif']"/></td>
@@ -51,21 +55,23 @@
                                     <td class="text-end"><t t-out="'%.2f' % r['ins']"/></td>
                                     <td class="text-end"><t t-out="'%.2f' % r['paye']"/></td>
                                 </tr>
-                                <tr t-foreach="[card['total']]" t-as="t">
-                                    <td><strong><t t-out="t['month']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['basic']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['gross']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['pension']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['shif']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['ahl']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['prmf']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['mortgage']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['deduct']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['charge']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['tax']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['pers']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['ins']"/></strong></td>
-                                    <td class="text-end"><strong><t t-out="'%.2f' % t['paye']"/></strong></td>
+                                <tr t-foreach="[card['total']]" t-as="tot">
+                                    <td><strong><t t-out="tot['month']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['basic']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['benefits']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['quarters']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['gross']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['pension']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['shif']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['ahl']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['prmf']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['mortgage']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['deduct']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['charge']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['tax']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['pers']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['ins']"/></strong></td>
+                                    <td class="text-end"><strong><t t-out="'%.2f' % tot['paye']"/></strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -75,7 +81,7 @@
                             the stored chargeable pay (same bands and
                             parameters as the original computation).
                         </p>
-                        <p>Columns follow the KRA Appendix 2A card (B benefits and C quarters are 0.00: the engine has no non-cash benefit rules yet). O = L − M − N.</p>
+                        <p>Columns follow the KRA Appendix 2A card (B benefits and C quarters print 0.00: the engine has no non-cash benefit rules yet). O = L − M − N.</p>
                     </div>
                 </t>
             </t>

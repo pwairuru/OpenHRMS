@@ -50,6 +50,62 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
+    <record id="view_ke_p10_wizard_form" model="ir.ui.view">
+        <field name="name">ke.p10.wizard.view.form</field>
+        <field name="model">ke.p10.wizard</field>
+        <field name="arch" type="xml">
+            <form string="P10 PAYE Return">
+                <group>
+                    <field name="month"/>
+                    <field name="year"/>
+                </group>
+                <p class="text-muted">
+                    Downloads the Sheet B import CSV for the KRA iTax
+                    Excel return (IMPORT CSV on Employee Details).
+                    Reconcile the Self-Assessed PAYE column total with
+                    the return before uploading.
+                </p>
+                <footer>
+                    <button name="action_export_csv" string="Export CSV"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_ke_p10_wizard" model="ir.actions.act_window">
+        <field name="name">P10 PAYE Return</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ke.p10.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="view_ke_ahl_wizard_form" model="ir.ui.view">
+        <field name="name">ke.ahl.wizard.view.form</field>
+        <field name="model">ke.ahl.wizard</field>
+        <field name="arch" type="xml">
+            <form string="AHL Report">
+                <group>
+                    <field name="month"/>
+                    <field name="year"/>
+                </group>
+                <footer>
+                    <button name="action_export" string="Export XLSX"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_ke_ahl_wizard" model="ir.actions.act_window">
+        <field name="name">AHL Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ke.ahl.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
     <record id="view_ke_p9_wizard_form" model="ir.ui.view">
         <field name="name">ke.p9.wizard.view.form</field>
         <field name="model">ke.p9.wizard</field>
@@ -87,6 +143,16 @@
             action="action_ke_shif_wizard"
             groups="hr_payroll_community.group_hr_payroll_community_user"
             sequence="21"/>
+    <menuitem id="menu_ke_p10_wizard" name="P10 PAYE Return"
+            parent="hr_payroll_community.menu_hr_payslip_reports"
+            action="action_ke_p10_wizard"
+            groups="hr_payroll_community.group_hr_payroll_community_user"
+            sequence="23"/>
+    <menuitem id="menu_ke_ahl_wizard" name="AHL Report"
+            parent="hr_payroll_community.menu_hr_payslip_reports"
+            action="action_ke_ahl_wizard"
+            groups="hr_payroll_community.group_hr_payroll_community_user"
+            sequence="24"/>
     <menuitem id="menu_ke_p9_wizard" name="P9 Tax Deduction Card"
             parent="hr_payroll_community.menu_hr_payslip_reports"
             action="action_ke_p9_wizard"

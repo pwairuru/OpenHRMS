@@ -6,12 +6,19 @@
         <field name="inherit_id" ref="hr_payroll_community.hr_contract_template_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='other_allowance']" position="after">
+                <field name="ke_kra_pin"/>
+                <field name="ke_nssf_no"/>
+                <field name="ke_shif_no"/>
                 <field name="ke_pension"/>
                 <field name="ke_mortgage"/>
                 <field name="ke_post_med"/>
                 <field name="ke_secondary"/>
                 <field name="ke_nonresident"/>
                 <field name="ke_disabled"/>
+                <field name="ke_disability_cert"/>
+                <field name="ke_insurance_life"/>
+                <field name="ke_insurance_health"/>
+                <field name="ke_insurance_edu"/>
                 <field name="ke_helb"/>
             </xpath>
         </field>

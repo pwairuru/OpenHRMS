@@ -43,6 +43,8 @@ class HrPayslip(models.Model):
         self.ensure_one()
         if not self.date_from:
             raise UserError('Set the payslip dates first.')
+        if self.state not in ('done', 'paid'):
+            raise UserError('P9 is available only for Done or Paid payslips.')
         wizard = self.env['ke.p9.wizard'].sudo().create({
             'year': self.date_from.year,
             'employee_id': self.employee_id.id,

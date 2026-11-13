@@ -56,7 +56,9 @@ class PayslipPortal(CustomerPortal):
         # (own validated slips only), mirroring the employee record rule.
         payslips = request.env['hr.payslip'].sudo().search(
             [('employee_id', '=', employee.id),
-             ('state', 'in', ('done', 'paid'))] if employee else [('id', '=', 0)],
+             ('state', 'in', ('done', 'paid')),
+             ('company_id', 'in', request.env.user.company_ids.ids)
+             ] if employee else [('id', '=', 0)],
             order='date_to desc, id desc',
         )
         return request.render(
@@ -88,10 +90,11 @@ class PayslipPortal(CustomerPortal):
         pdf, _ = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
             'hr_payroll_community.hr_payslip_report_action',
             res_ids=[payslip.id])
+        filename = payslip.sudo()._get_payslip_pdf_filename()
         return request.make_response(
             pdf,
             headers=[
                 ('Content-Type', 'application/pdf'),
                 ('Content-Disposition',
-                 'attachment; filename=%s' % payslip.sudo()._get_payslip_pdf_filename()),
+                 'attachment; filename="%s"' % filename),
             ])

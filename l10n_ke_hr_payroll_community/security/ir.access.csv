@@ -3,5 +3,16 @@ access_ke_rule_parameter_user,access.ke.hr.rule.parameter.user,model_ke_hr_rule_
 ke_hr_rule_parameter_multi_company,KE parameter multi company,model_ke_hr_rule_parameter,,crud,"['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]"
 access_ke_nssf_wizard,access.ke.nssf.wizard,model_ke_nssf_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
 access_ke_shif_wizard,access.ke.shif.wizard,model_ke_shif_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
+access_ke_ahl_wizard,access.ke.ahl.wizard,model_ke_ahl_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
+access_ke_p10_wizard,access.ke.p10.wizard,model_ke_p10_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
 access_ke_p9_wizard,access.ke.p9.wizard,model_ke_p9_wizard,hr_payroll_community.group_hr_payroll_community_user,crud,
-access_ke_p9_wizard_employee,Employee: P9 wizard read,model_ke_p9_wizard,base.group_user,r,
+access_ke_p9_wizard_employee,Employee: own P9 wizard read,model_ke_p9_wizard,base.group_user,r,"[('employee_id.user_id', '=', user.id)]"
+access_hr_payslip_hr,HR: validated payslips read,hr_payroll_community.model_hr_payslip,hr.group_hr_user,r,"[('state', 'in', ['done', 'paid'])]"
+access_hr_payslip_line_hr,HR: validated payslip lines read,hr_payroll_community.model_hr_payslip_line,hr.group_hr_user,r,"[('slip_id.state', 'in', ['done', 'paid'])]"
+access_hr_payslip_input_hr,HR: validated payslip inputs read,hr_payroll_community.model_hr_payslip_input,hr.group_hr_user,r,"[('payslip_id.state', 'in', ['done', 'paid'])]"
+access_hr_payslip_worked_days_hr,HR: validated worked days read,hr_payroll_community.model_hr_payslip_worked_days,hr.group_hr_user,r,"[('payslip_id.state', 'in', ['done', 'paid'])]"
+access_ke_nssf_wizard_hr,HR: NSSF report,model_ke_nssf_wizard,hr.group_hr_user,crud
+access_ke_shif_wizard_hr,HR: SHIF report,model_ke_shif_wizard,hr.group_hr_user,crud
+access_ke_ahl_wizard_hr,HR: AHL report,model_ke_ahl_wizard,hr.group_hr_user,crud
+access_ke_p9_wizard_hr,HR: P9 wizard,model_ke_p9_wizard,hr.group_hr_user,crud
+access_ke_p10_wizard_hr,HR: P10 wizard,model_ke_p10_wizard,hr.group_hr_user,crud

@@ -17,8 +17,8 @@
 #############################################################################
 {
     'name': 'Kenya - Payroll (Community)',
-    'version': '20.0.1.0.6',
-    'category': 'Human Resources/Payroll',
+    'version': '20.0.1.0.8',
+    'category': 'Accounting/Localizations/Payroll',
     'summary': 'Kenya statutory payroll for hr_payroll_community',
     'description': 'Salary structures, rules, registers and reports for Kenya (PAYE, NSSF, SHIF, AHL).',
     'author': 'Cybrosys Techno Solutions',
