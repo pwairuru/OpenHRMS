@@ -8,6 +8,14 @@
         </xpath>
     </template>
 
+    <template id="portal_my_payslip_detail_p9_button"
+              inherit_id="hr_payroll_community.portal_my_payslip_detail"
+              name="Payslip Detail P9 button">
+        <xpath expr="//a[hasclass('btn-primary')]" position="after">
+            <a t-if="payslip.date_from" class="btn btn-secondary" t-attf-href="/my/p9/#{payslip.date_from.year}/pdf">Download P9 (<t t-esc="payslip.date_from.year"/>)</a>
+        </xpath>
+    </template>
+
     <template id="portal_my_p9_list" name="My P9 Cards">
         <t t-call="portal.portal_layout">
             <t t-set="title">P9 Tax Deduction Cards</t>
