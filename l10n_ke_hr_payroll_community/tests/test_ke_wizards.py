@@ -177,6 +177,8 @@ class TestKeWizards(TransactionCase):
             self.assertIn('A111111111Z', html)
             self.assertIn('NSSF-9', html)
             self.assertIn('SHIF-9', html)
+            self.assertIn('Payslip #', html)
+            self.assertNotIn('<strong>Reference</strong>', html)
 
     def test_p9_template_renders_cells(self):
         self._slip(100000, '2026-11-01', '2026-11-30', 'paid')

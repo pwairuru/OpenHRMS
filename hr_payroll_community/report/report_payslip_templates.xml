@@ -6,7 +6,7 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <h2>Pay Slip</h2>
+                        <h2>Payslip #<span t-field="o.number"/></h2>
                         <p t-field="o.name"/>
                         <table class="table table-sm table-bordered">
                             <tr>
@@ -39,15 +39,9 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <strong>Reference</strong>
-                                </td>
-                                <td>
-                                    <span t-field="o.number"/>
-                                </td>
-                                <td>
                                     <strong>Bank Account</strong>
                                 </td>
-                                <td>
+                                <td colspan="3">
                                     <span t-field="o.employee_id.primary_bank_account_id"/>
                                 </td>
                             </tr>
