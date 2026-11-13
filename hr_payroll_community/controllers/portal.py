@@ -12,6 +12,7 @@
 from odoo import http
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
+from werkzeug.exceptions import HTTPException
 
 
 class PayslipPortal(CustomerPortal):
@@ -68,7 +69,9 @@ class PayslipPortal(CustomerPortal):
                 type='http', auth='user', website=True)
     def portal_my_payslip(self, payslip_id, **kw):
         payslip = self._get_own_payslip(payslip_id)
-        if hasattr(payslip, 'status_code'):
+        # request.not_found() returns a werkzeug HTTPException (`.code`,
+        # not `.status_code`), so isinstance is the reliable guard.
+        if isinstance(payslip, HTTPException):
             return payslip
         return request.render(
             'hr_payroll_community.portal_my_payslip_detail', {
@@ -80,7 +83,7 @@ class PayslipPortal(CustomerPortal):
                 type='http', auth='user', website=True)
     def portal_my_payslip_pdf(self, payslip_id, **kw):
         payslip = self._get_own_payslip(payslip_id)
-        if hasattr(payslip, 'status_code'):
+        if isinstance(payslip, HTTPException):
             return payslip
         pdf, _ = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
             'hr_payroll_community.hr_payslip_report_action',
