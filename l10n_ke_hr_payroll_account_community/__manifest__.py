@@ -27,7 +27,7 @@
     'author': 'Cybrosys Techno Solutions',
     'company': 'Cybrosys Techno Solutions',
     'maintainer': 'Cybrosys Techno Solutions',
-    'website': 'https://www.openhrms.com',
+    'website': 'https://wwww.hopesting.com',
     'countries': ['ke'],
     'depends': [
         'l10n_ke_hr_payroll_community',

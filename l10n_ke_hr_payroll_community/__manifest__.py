@@ -86,7 +86,7 @@ module to post the matching journal entries.
     'author': 'Cybrosys Techno Solutions',
     'company': 'Cybrosys Techno Solutions',
     'maintainer': 'Cybrosys Techno Solutions',
-    'website': 'https://www.openhrms.com',
+    'website': 'https://wwww.hopesting.com',
     'countries': ['ke'],
     'depends': ['hr_payroll_community'],
     'data': [
