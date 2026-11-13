@@ -33,7 +33,7 @@ class PayslipPortal(CustomerPortal):
         are never exposed, even to the owner.
         """
         try:
-            payslip = request.env['hr.payslip'].browse(int(payslip_id))
+            payslip = request.env['hr.payslip'].sudo().browse(int(payslip_id))
         except ValueError:
             return request.not_found()
         if not payslip.exists():
@@ -50,7 +50,10 @@ class PayslipPortal(CustomerPortal):
     @http.route(['/my/payslips'], type='http', auth='user', website=True)
     def portal_my_payslips(self, **kw):
         employee = self._get_employee()
-        payslips = request.env['hr.payslip'].search(
+        # Sudo: portal users (group_portal) carry no hr.payslip ACL at all,
+        # so a user-env search 403s. The domain is the enforced policy
+        # (own validated slips only), mirroring the employee record rule.
+        payslips = request.env['hr.payslip'].sudo().search(
             [('employee_id', '=', employee.id),
              ('state', 'in', ('done', 'paid'))] if employee else [('id', '=', 0)],
             order='date_to desc, id desc',
