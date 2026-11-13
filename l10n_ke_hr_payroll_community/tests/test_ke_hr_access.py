@@ -90,6 +90,30 @@ class TestKeHrAccess(TransactionCase):
             result = wiz.action_export()
             self.assertEqual(result.get('type'), 'ir.actions.act_url')
 
+    def test_employee_form_exposes_ke_identifiers(self):
+        """KRA PIN / NSSF / SHIF must sit on the employee form itself:
+        related (writable) to the current contract, where payroll reads
+        them. HR enters them on the employee; reports read the contract.
+        """
+        employee = self.env['hr.employee'].create({
+            'name': 'KE IDs Emp',
+            'company_id': self._company().id,
+        })
+        employee.write({
+            'ke_kra_pin': 'A111111111Z',
+            'ke_nssf_no': 'NSSF-1',
+            'ke_shif_no': 'SHIF-1',
+        })
+        contract = self.env['hr.version'].search(
+            [('employee_id', '=', employee.id)], limit=1)
+        self.assertEqual(contract.ke_kra_pin, 'A111111111Z')
+        self.assertEqual(contract.ke_nssf_no, 'NSSF-1')
+        self.assertEqual(contract.ke_shif_no, 'SHIF-1')
+        view = self.env.ref(
+            'l10n_ke_hr_payroll_community.view_employee_form_ke')
+        for fname in ('ke_kra_pin', 'ke_nssf_no', 'ke_shif_no'):
+            self.assertIn(fname, view.arch_db)
+
     def test_lay_user_wizard_isolation(self):
         """No cross-employee P9 disclosure via wizard enumeration: a
         non-payroll user can read only wizards pinned to their own

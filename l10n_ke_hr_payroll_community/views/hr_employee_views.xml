@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_ke" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.ke</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_payroll_community.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Kenya IDs" name="ke_ids">
+                    <group>
+                        <field name="ke_kra_pin"/>
+                        <field name="ke_nssf_no"/>
+                        <field name="ke_shif_no"/>
+                    </group>
+                    <p class="text-muted">
+                        Stored on the current contract, where payroll and
+                        the P9 / P10 / NSSF / SHIF extracts read them.
+                    </p>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

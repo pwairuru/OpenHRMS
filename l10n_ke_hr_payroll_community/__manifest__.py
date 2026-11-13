@@ -98,6 +98,7 @@ module to post the matching journal entries.
         'data/hr_payroll_structure_data.xml',
         'data/hr_salary_rule_data.xml',
         'views/hr_version_views.xml',
+        'views/hr_employee_views.xml',
         'views/hr_payslip_views.xml',
         'views/res_config_settings_views.xml',
         'views/portal_templates.xml',
