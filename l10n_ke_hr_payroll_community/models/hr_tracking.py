@@ -87,7 +87,8 @@ class HrSalaryRuleTracking(models.Model):
              "rule without removing it.")
     appears_on_payslip = fields.Boolean(
         string='Appears on Payslip', default=True, tracking=True,
-        help="Used to display the salary rule on payslip.")
+        help="Used to display the salary"
+             "rule on payslip.")
     parent_rule_id = fields.Many2one(
         'hr.salary.rule', string='Parent Salary Rule', index=True,
         tracking=True, help="Choose Hr Salary Rule")
@@ -110,6 +111,21 @@ class HrSalaryRuleTracking(models.Model):
              'variable basic.')
     condition_python = fields.Text(
         string='Python Condition', tracking=True,
+        default='''
+    # Available variables:
+    #----------------------
+    # payslip: object containing the payslips
+    # employee: hr.employee object
+    # contract: hr.version object
+    # rules: object containing the rules code (previously computed)
+    # categories: object containing the computed salary rule categories 
+    # (sum of amount of all rules belonging to that category).
+    # worked_days: object containing the computed worked days
+    # inputs: object containing the computed inputs
+
+    # Note: returned value have to be set in the variable 'result'
+
+    result = rules.NET > categories.NET * 0.10''',
         help='Applied this rule for calculation'
              ' if condition is true. You can specify'
              ' condition like basic > 1000.')
@@ -133,7 +149,22 @@ class HrSalaryRuleTracking(models.Model):
         string='Percentage (%)', digits='Payroll Rate', tracking=True,
         help='For example, enter 50.0 to apply a percentage of 50%')
     amount_python_compute = fields.Text(
-        string='Python Code', tracking=True)
+        string='Python Code', tracking=True,
+        default='''
+            # Available variables:
+            #----------------------
+            # payslip: object containing the payslips
+            # employee: hr.employee object
+            # contract: hr.version object
+            # rules: object containing the rules code (previously computed)
+            # categories: object containing the computed salary rule categories 
+            # (sum of amount of all rules belonging to that category).
+            # worked_days: object containing the computed worked days.
+            # inputs: object containing the computed inputs.
+
+            # Note: returned value have to be set in the variable 'result'
+
+            result = contract.wage * 0.10''')
     amount_percentage_base = fields.Char(
         string='Percentage based on', tracking=True,
         help='result will be affected to a variable')
