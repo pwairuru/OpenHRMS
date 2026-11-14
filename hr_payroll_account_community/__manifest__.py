@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Odoo20 Payroll Accounting',
-    'version': '20.0.1.0.0',
+    'version': '20.0.1.0.1',
     'category': 'Human Resources',
     'summary': """Helps you to manage payroll and 
      accounting""",

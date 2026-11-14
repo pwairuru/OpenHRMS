@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Salary Structure: chatter after sheet (reservation pattern: sheet sibling) -->
+    <record id="view_structure_form_tracking" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.form.tracking</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_payroll_structure_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="after">
+                <chatter/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Salary Rule: chatter after sheet (reservation pattern: sheet sibling) -->
+    <record id="view_salary_rule_form_tracking" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form.tracking</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_salary_rule_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="after">
+                <chatter/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Contribution Register: chatter after sheet (reservation pattern: sheet sibling) -->
+    <record id="view_contribution_register_form_tracking" model="ir.ui.view">
+        <field name="name">hr.contribution.register.form.tracking</field>
+        <field name="model">hr.contribution.register</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_contribution_register_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="after">
+                <chatter/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Structure Type: add chatter after sheet (exact hotel pattern: sheet sibling) -->
+    <record id="view_structure_type_form_tracking" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.type.form.tracking</field>
+        <field name="model">hr.payroll.structure.type</field>
+        <field name="inherit_id" ref="hr_payroll_community.view_hr_payroll_structure_type_form_inherit_payroll"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="after">
+                <chatter/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

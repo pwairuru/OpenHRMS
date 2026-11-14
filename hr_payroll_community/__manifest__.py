@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Odoo 20 HR Payroll',
-    'version': '20.0.1.0.1',
+    'version': '20.0.1.0.2',
     'category': 'Human Resources',
     'summary': """Odoo 20 HR Payroll, Odoo20 Payroll, Payroll, Odoo Payroll,
     Payroll V20, Odoo20, Payroll Management, Odoo20 Payslip""",
