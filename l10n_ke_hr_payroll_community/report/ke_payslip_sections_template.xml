@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grouped KE payslip lines (report-only, KE module owns the change).
+
+    Inherits the base details template and regroups the single visible
+    lines table into at most 6 blocks: Basic / Allowances / Gross Pay
+    (bold total) / Deductions (DED family incl. all KE_* children rolled
+    up) / Net Pay (bold total) / Employer contributions (COMP family,
+    rendered only when visible lines exist). Each block header is bold
+    and carries its monetary subtotal, mirroring the old by-register
+    table pattern. Sections with no visible (appears_on_payslip) lines
+    are skipped. KE_ engine prefixes are stripped inline, so the old
+    code-strip xpaths for this template are retired with it.
+    Pure QWeb: no Python, no stored model, no migration. -->
+    <template id="ke_report_payslipdetails_sections"
+              inherit_id="hr_payroll_community.report_payslipdetails">
+        <xpath expr="//table[contains(@class, 'mb32')]/tbody"
+               position="replace">
+            <tbody>
+                <t t-set="lines" t-value="o.line_ids.filtered(lambda line: line.appears_on_payslip)"/>
+                <t t-set="basic_lines" t-value="lines.filtered(lambda l: (l.category_id.code or '') == 'BASIC')"/>
+                <t t-set="allowance_lines" t-value="lines.filtered(lambda l: (l.category_id.code or '') in ('ALW', 'HRA', 'DA', 'Travel', 'Meal', 'Medical', 'Other'))"/>
+                <t t-set="gross_lines" t-value="lines.filtered(lambda l: (l.code or '') in ('GROSS', 'KE_GROSS'))"/>
+                <t t-set="net_lines" t-value="lines.filtered(lambda l: (l.code or '') in ('NET', 'KE_NET'))"/>
+                <t t-set="deduction_lines" t-value="lines.filtered(lambda l: (l.category_id.code or '') == 'DED' or ((l.category_id.parent_id.code if l.category_id.parent_id else '') or '') == 'DED')"/>
+                <t t-set="comp_lines" t-value="lines.filtered(lambda l: (l.category_id.code or '') == 'COMP' or ((l.category_id.parent_id.code if l.category_id.parent_id else '') or '') == 'COMP')"/>
+
+                <t t-if="basic_lines">
+                    <tr class="fw-bold">
+                        <td colspan="4"><span>Basic</span></td>
+                        <td class="text-end"><span t-out="sum(basic_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                    <tr t-foreach="basic_lines" t-as="line">
+                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                        <td><span t-field="line.name"/></td>
+                        <td class="text-end"><span t-out="line.quantity"/></td>
+                        <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                        <td class="text-end"><span t-out="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                </t>
+                <t t-if="allowance_lines">
+                    <tr class="fw-bold">
+                        <td colspan="4"><span>Allowances</span></td>
+                        <td class="text-end"><span t-out="sum(allowance_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                    <tr t-foreach="allowance_lines" t-as="line">
+                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                        <td><span t-field="line.name"/></td>
+                        <td class="text-end"><span t-out="line.quantity"/></td>
+                        <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                        <td class="text-end"><span t-out="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                </t>
+                <t t-if="gross_lines">
+                    <tr class="fw-bold">
+                        <td colspan="4"><span>Gross Pay</span></td>
+                        <td class="text-end"><span t-out="sum(gross_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                </t>
+                <t t-if="deduction_lines">
+                    <tr class="fw-bold">
+                        <td colspan="4"><span>Deductions</span></td>
+                        <td class="text-end"><span t-out="sum(deduction_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                    <tr t-foreach="deduction_lines" t-as="line">
+                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                        <td><span t-field="line.name"/></td>
+                        <td class="text-end"><span t-out="line.quantity"/></td>
+                        <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                        <td class="text-end"><span t-out="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                </t>
+                <t t-if="net_lines">
+                    <tr class="fw-bold">
+                        <td colspan="4"><span>Net Pay</span></td>
+                        <td class="text-end"><span t-out="sum(net_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                </t>
+                <t t-if="comp_lines">
+                    <tr class="fw-bold">
+                        <td colspan="4"><span>Employer contributions</span></td>
+                        <td class="text-end"><span t-out="sum(comp_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                    <tr t-foreach="comp_lines" t-as="line">
+                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                        <td><span t-field="line.name"/></td>
+                        <td class="text-end"><span t-out="line.quantity"/></td>
+                        <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                        <td class="text-end"><span t-out="line.total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                    </tr>
+                </t>
+            </tbody>
+        </xpath>
+
+        <!-- Drop the redundant by-register second table: grouped
+        deductions above replace it. -->
+        <xpath expr="//h3[text()='Payslip Lines by Contribution Register']" position="replace"/>
+        <xpath expr="//table[contains(@class, 'mt32')]" position="replace"/>
+    </template>
+</odoo>

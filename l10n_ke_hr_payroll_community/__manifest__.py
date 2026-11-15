@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Kenya - Payroll (Community)',
-    'version': '20.0.1.0.14',
+    'version': '20.0.1.0.15',
     'category': 'Accounting/Localization',
     'summary': 'Kenya statutory payroll for hr_payroll_community',
     'description': """Kenya statutory payroll for hr_payroll_community.
@@ -109,6 +109,7 @@ module to post the matching journal entries.
         'report/ke_code_display_templates.xml',
         'report/ke_p9_individual_template.xml',
         'report/ke_payslip_ids_template.xml',
+        'report/ke_payslip_sections_template.xml',
     ],
     'license': 'LGPL-3',
     'installable': True,
