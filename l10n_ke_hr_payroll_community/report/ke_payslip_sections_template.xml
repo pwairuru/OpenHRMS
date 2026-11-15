@@ -96,5 +96,10 @@
         deductions above replace it. -->
         <xpath expr="//h3[text()='Payslip Lines by Contribution Register']" position="replace"/>
         <xpath expr="//table[contains(@class, 'mt32')]" position="replace"/>
+
+        <!-- Payslip Lines heading one point under Bootstrap h3. -->
+        <xpath expr="//h3[text()='Payslip Lines']" position="replace">
+            <h3 style="font-size: 20pt;">Payslip Lines</h3>
+        </xpath>
     </template>
 </odoo>

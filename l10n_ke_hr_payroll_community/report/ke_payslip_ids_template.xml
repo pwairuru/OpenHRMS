@@ -13,11 +13,22 @@
                 <td><strong>NSSF No</strong></td>
                 <td><span t-field="o.employee_id.ke_nssf_no"/></td>
             </tr>
-            <tr t-if="o.employee_id.ke_shif_no">
-                <td><strong>SHIF No</strong></td>
-                <td><span t-field="o.employee_id.ke_shif_no"/></td>
-                <td/>
-                <td/>
+        </xpath>
+        <!-- SHIF shares its row with Bank Account to keep the header
+        compact. The SHIF pair only prints when a number exists; the
+        Bank pair always prints. -->
+        <xpath expr="//tr[td/strong[text()='Bank Account']]"
+               position="replace">
+            <tr>
+                <t t-if="o.employee_id.ke_shif_no">
+                    <td><strong>SHIF No</strong></td>
+                    <td><span t-field="o.employee_id.ke_shif_no"/></td>
+                </t>
+                <t t-else="">
+                    <td colspan="2"/>
+                </t>
+                <td><strong>Bank Account</strong></td>
+                <td><span t-field="o.employee_id.primary_bank_account_id"/></td>
             </tr>
         </xpath>
     </template>
@@ -32,11 +43,22 @@
                 <td><strong>NSSF No</strong></td>
                 <td><span t-field="o.employee_id.ke_nssf_no"/></td>
             </tr>
-            <tr t-if="o.employee_id.ke_shif_no">
-                <td><strong>SHIF No</strong></td>
-                <td><span t-field="o.employee_id.ke_shif_no"/></td>
-                <td/>
-                <td/>
+        </xpath>
+        <!-- SHIF shares its row with Bank Account to keep the header
+        compact. The SHIF pair only prints when a number exists; the
+        Bank pair always prints. -->
+        <xpath expr="//tr[td/strong[text()='Bank Account']]"
+               position="replace">
+            <tr>
+                <t t-if="o.employee_id.ke_shif_no">
+                    <td><strong>SHIF No</strong></td>
+                    <td><span t-field="o.employee_id.ke_shif_no"/></td>
+                </t>
+                <t t-else="">
+                    <td colspan="2"/>
+                </t>
+                <td><strong>Bank Account</strong></td>
+                <td><span t-field="o.employee_id.primary_bank_account_id"/></td>
             </tr>
         </xpath>
     </template>
