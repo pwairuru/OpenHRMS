@@ -26,12 +26,12 @@
                 <t t-set="comp_lines" t-value="lines.filtered(lambda l: (l.category_id.code or '') == 'COMP' or ((l.category_id.parent_id.code if l.category_id.parent_id else '') or '') == 'COMP')"/>
 
                 <t t-if="basic_lines">
-                    <tr class="fw-bold">
+                    <tr class="fw-bold table-active">
                         <td colspan="4"><span>Basic</span></td>
                         <td class="text-end"><span t-out="sum(basic_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
                     </tr>
-                    <tr t-foreach="basic_lines" t-as="line">
-                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                    <tr class="small" t-foreach="basic_lines" t-as="line">
+                        <td style="padding-left: 20px;"><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
                         <td><span t-field="line.name"/></td>
                         <td class="text-end"><span t-out="line.quantity"/></td>
                         <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
@@ -39,12 +39,12 @@
                     </tr>
                 </t>
                 <t t-if="allowance_lines">
-                    <tr class="fw-bold">
+                    <tr class="fw-bold table-active">
                         <td colspan="4"><span>Allowances</span></td>
                         <td class="text-end"><span t-out="sum(allowance_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
                     </tr>
-                    <tr t-foreach="allowance_lines" t-as="line">
-                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                    <tr class="small" t-foreach="allowance_lines" t-as="line">
+                        <td style="padding-left: 20px;"><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
                         <td><span t-field="line.name"/></td>
                         <td class="text-end"><span t-out="line.quantity"/></td>
                         <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
@@ -52,18 +52,18 @@
                     </tr>
                 </t>
                 <t t-if="gross_lines">
-                    <tr class="fw-bold">
+                    <tr class="fw-bold table-active">
                         <td colspan="4"><span>Gross Pay</span></td>
                         <td class="text-end"><span t-out="sum(gross_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
                     </tr>
                 </t>
                 <t t-if="deduction_lines">
-                    <tr class="fw-bold">
+                    <tr class="fw-bold table-active">
                         <td colspan="4"><span>Deductions</span></td>
                         <td class="text-end"><span t-out="sum(deduction_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
                     </tr>
-                    <tr t-foreach="deduction_lines" t-as="line">
-                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                    <tr class="small" t-foreach="deduction_lines" t-as="line">
+                        <td style="padding-left: 20px;"><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
                         <td><span t-field="line.name"/></td>
                         <td class="text-end"><span t-out="line.quantity"/></td>
                         <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
@@ -71,18 +71,18 @@
                     </tr>
                 </t>
                 <t t-if="net_lines">
-                    <tr class="fw-bold">
+                    <tr class="fw-bold table-active">
                         <td colspan="4"><span>Net Pay</span></td>
                         <td class="text-end"><span t-out="sum(net_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
                     </tr>
                 </t>
                 <t t-if="comp_lines">
-                    <tr class="fw-bold">
+                    <tr class="fw-bold table-active">
                         <td colspan="4"><span>Employer contributions</span></td>
                         <td class="text-end"><span t-out="sum(comp_lines.mapped('total'))" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
                     </tr>
-                    <tr t-foreach="comp_lines" t-as="line">
-                        <td><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
+                    <tr class="small" t-foreach="comp_lines" t-as="line">
+                        <td style="padding-left: 20px;"><span t-out="(line.code or '').replace('KE_', '', 1)"/></td>
                         <td><span t-field="line.name"/></td>
                         <td class="text-end"><span t-out="line.quantity"/></td>
                         <td class="text-end"><span t-out="line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>

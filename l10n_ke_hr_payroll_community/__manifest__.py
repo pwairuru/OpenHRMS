@@ -17,7 +17,7 @@
 #############################################################################
 {
     'name': 'Kenya - Payroll (Community)',
-    'version': '20.0.1.0.15',
+    'version': '20.0.1.0.16',
     'category': 'Accounting/Localization',
     'summary': 'Kenya statutory payroll for hr_payroll_community',
     'description': """Kenya statutory payroll for hr_payroll_community.
